@@ -1,10 +1,34 @@
 (ns walton.core
   (:use clojure.contrib.duck-streams
         clojure.contrib.str-utils
-        clojure.contrib.seq-utils))
+        clojure.contrib.seq-utils
+        clj-html.core)
+  (:gen-class))
 
+(def *project-root* (System/getProperty "user.dir"))
+
+(defhtml application [text body]
+  [:html
+   [:head
+    [:title text]]
+   [:body body]])
+
+(defhtml header [text]
+  [:h3 text])
+
+(defhtml code-body [body]
+  [:ul body])
+
+(defhtml code-block [text]
+  [:li [:pre text]])
+
+;; Use this if you build the jar
 (def logfiles
-     (file-seq (java.io.File. "../../logs")))
+     (file-seq (java.io.File. (str *project-root* "/logs/"))))
+
+;; Use this in your REPL
+(def logfiles
+     (file-seq (java.io.File. "/home/defn/git/walton/logs")))
 
 (defn parse-log [logfile]
   (line-seq (reader logfile)))
@@ -33,5 +57,20 @@ Usage: (extract-code \"zipmap\" parsed-logs"
   [text logs]
   (let [search-output (find-lines text logs)
         regex (re-pattern (str "\\(.*" text ".*\\)"))]
-    (remove empty?
-            (map #(re-find regex %) search-output))))
+    (apply sorted-set (remove empty?
+                        (map #(re-find regex %) search-output)))))
+
+(defn walton-bare [text]
+  (extract-code text parsed-logs))
+
+(defn walton [text]
+  (spit (java.io.File. (str *project-root* "/text.html"))
+        (application text
+          (html (header text)
+                (code-body
+                 (map pre (extract-code text parsed-logs)))))))
+
+(defn -main [& args]
+  (let [search-term (str (first args))
+        html? (str (second args))]
+    (walton search-term)))
