@@ -36,6 +36,8 @@
 (def parsed-logs
      (map parse-log (rest logfiles)))
 
+
+;; Licenser is a mad genius.
 (defn find-lines
 "Search for the string [text] in [logs].
 
@@ -68,7 +70,7 @@ Usage: (extract-code \"zipmap\" parsed-logs"
         (application text
           (html (header text)
                 (code-body
-                 (map pre (extract-code text parsed-logs)))))))
+                 (map code-block (extract-code text parsed-logs)))))))
 
 (defn -main [& args]
   (let [search-term (str (first args))
