@@ -28,6 +28,11 @@ hilighting and other goodies coming soon?!)
 
 ## Installation
 
+First off, you're going to need the .log files!  You can download them
+[here](http://www.devinwalters.com/clojure-logs.tar.bz2 "here").  Once
+you've got the log files, unzip them into the project root directory
+into a directory called `logs`.
+
 Use leiningen in the project root directory to build a jar.
 
     $ lein deps
@@ -37,7 +42,8 @@ Move the resulting .jar onto your classpath.
 
 *OR*
 
-Edit your project.clj to include the relevant entry for walton, which you can find on clojars.org.
+Edit your project.clj to include the relevant entry for walton, which
+you can find on clojars.org. 
 
     $ lein deps
     $ lein repl
