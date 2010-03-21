@@ -30,47 +30,46 @@
 (def logfiles
    (rest (file-seq (java.io.File. (str *project-root* "/logs/")))))
 
-(defn parse-log [logfile]
-  (line-seq (reader logfile)))
+(defn find-lines-in-file [#^String text file]
+"Opens a file and rextracts the relevant lines from it.
 
-(def parsed-logs
-     (map parse-log (rest logfiles)))
-
+Usage: (find-lines-in-file \"zipmap\" a-logfile)"
+  (with-open [rdr (reader file)]
+    (doall
+      (filter (fn [#^String line]
+         (< 0 (.indexOf line text)))
+         (line-seq rdr)))))
 
 ;; Licenser is a mad genius.
 (defn find-lines
-"Search for the string [text] in [logs].
+"Search for the string [text] in [files].
 
-Usage: (find-lines \"zipmap\" parsed-logs)"
-  [#^String text logs]
+Usage: (find-lines \"zipmap\" logfiles)"
+  [#^String text files]
   (flatten
-   (map
-    (fn [log]
-      (filter
-       (fn [#^String line]
-         (< 0 (.indexOf line text)))
-       log))
-    logs)))
+   (pmap
+     (partial find-lines-in-file text)
+     files)))
 
 (defn extract-code
 "Extracts code blocks delimited by ( and ) which contain [text].
 
-Usage: (extract-code \"zipmap\" parsed-logs"
-  [text logs]
-  (let [search-output (find-lines text logs)
+Usage: (extract-code \"zipmap\" parsed-logs)"
+  [text files]
+  (let [search-output (find-lines text files)
         regex (re-pattern (str "\\(.*" text ".*\\)"))]
     (apply sorted-set (remove empty?
-                        (map #(re-find regex %) search-output)))))
+     (map #(re-find regex %) search-output)))))
 
 (defn walton-bare [text]
-  (extract-code text parsed-logs))
+  (extract-code text logfiles))
 
 (defn walton [text]
   (spit (java.io.File. (str *project-root* "/text.html"))
         (application text
           (html (header text)
                 (code-body
-                 (map code-block (extract-code text parsed-logs)))))))
+                 (map code-block (extract-code text logfiles)))))))
 
 (defn -main [& args]
   (let [search-term (str (first args))
