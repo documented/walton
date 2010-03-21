@@ -2,8 +2,11 @@
   (:use clojure.contrib.duck-streams
         clojure.contrib.str-utils
         clojure.contrib.seq-utils
-        clj-html.core)
+        clj-html.core
+        net.licenser.sandbox)
   (:gen-class))
+
+(def *sandbox* (create-sandbox 'walton.sandbox secure-tester 100))
 
 (def *project-root* (System/getProperty "user.dir"))
 
@@ -51,6 +54,7 @@ Usage: (find-lines \"zipmap\" logfiles)"
      (partial find-lines-in-file text)
      files)))
 
+
 (defn extract-code
 "Extracts code blocks delimited by ( and ) which contain [text].
 
@@ -60,6 +64,15 @@ Usage: (extract-code \"zipmap\" parsed-logs)"
         regex (re-pattern (str "\\(.*" text ".*\\)"))]
     (apply sorted-set (remove empty?
      (map #(re-find regex %) search-output)))))
+
+(defn extract-working-code [#^String text files]
+    (filter (fn [code]
+        (try
+          (*sandbox*  code)
+          true
+          (catch Exception e
+            false)))
+        (extract-code text files)))
 
 (defn walton-bare [text]
   (extract-code text logfiles))
