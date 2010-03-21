@@ -22,13 +22,13 @@
 (defhtml code-block [text]
   [:li [:pre text]])
 
+  ;; Use this in your REPL
+  (def logfiles
+       (file-seq (java.io.File. "/home/defn/git/walton/logs")))
+
 ;; Use this if you build the jar
 (def logfiles
-     (file-seq (java.io.File. (str *project-root* "/logs/"))))
-
-;; Use this in your REPL
-(def logfiles
-     (file-seq (java.io.File. "/home/defn/git/walton/logs")))
+   (rest (file-seq (java.io.File. (str *project-root* "/logs/")))))
 
 (defn parse-log [logfile]
   (line-seq (reader logfile)))
