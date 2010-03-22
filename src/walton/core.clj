@@ -6,7 +6,7 @@
         net.licenser.sandbox)
   (:gen-class))
 
-(def *sandbox* (create-sandbox 'walton.sandbox secure-tester 100))
+(def *sandbox* (stringify-sandbox (new-sandbox :timeout 100)))
 
 (def *project-root* (System/getProperty "user.dir"))
 
