@@ -22,8 +22,9 @@
 (defhtml code-body [body]
   [:ul body])
 
-(defhtml code-block [text]
-  [:li [:pre text]])
+(defhtml code-block [[code result]]
+  [:li [:pre code] ";;=&gt" [:pre result]])
+
 
   ;; Use this in your REPL
   (def logfiles
@@ -66,23 +67,24 @@ Usage: (extract-code \"zipmap\" parsed-logs)"
      (map #(re-find regex %) search-output)))))
 
 (defn extract-working-code [#^String text files]
-    (filter (fn [code]
+    (map (fn [code]
         (try
-          (*sandbox*  code)
-          true
+          (let [r (*sandbox*  code)]
+          [code (pr-str r)])
           (catch Exception e
-            false)))
+            [code nil])))
         (extract-code text files)))
 
 (defn walton-bare [text]
-  (extract-code text logfiles))
+  (extract-working-code text logfiles))
 
 (defn walton [text]
-  (spit (java.io.File. (str *project-root* "/text.html"))
-        (application text
-          (html (header text)
-                (code-body
-                 (map code-block (extract-code text logfiles)))))))
+  (let [results (extract-working-code text logfiles)]
+    (spit (java.io.File. (str *project-root* "/text.html"))
+          (application text
+            (html (header text)
+                  (code-body
+                   (map code-block (filter second results))))))))
 
 (defn -main [& args]
   (let [search-term (str (first args))
