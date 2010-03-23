@@ -10,6 +10,36 @@
 
 (def *project-root* (System/getProperty "user.dir"))
 
+
+(defn extract-expressions [string]
+  (second
+   (reduce (fn [[exp exps state cnt] c]
+	     (cond
+	      (= state :escape)
+	      [(.append exp c) exps :string cnt]
+	      (= state :string) (cond
+				 (= c \")
+				 [(.append exp c) exps :code cnt]
+				 (= c \\)
+				 [(.append exp c) exps :escape cnt]
+				 (= c \\)
+				 [(.append exp c) exps :escape cnt]
+				 :else
+				 [(.append exp c) exps :string cnt])
+	      (and (= cnt 1) (= c \)))
+  	      [(java.lang.StringBuilder.) (cons (str (.append exp c)) exps) :text 0]
+	      (= c \()
+	      [(.append exp c) exps :code (inc cnt)]
+	      (and (> cnt 1) (= c \)))
+	      [(.append exp c) exps :code (dec cnt)]
+	      (and (> cnt 0) (= c \"))
+	      [(.append exp c) exps :string cnt]
+	      (> cnt 0)
+	      [(.append exp c) exps :code cnt]
+	      :else [exp exps state cnt]))
+	   [(java.lang.StringBuilder.) '() :text 0]
+	   string)))
+
 (defhtml application [text body]
   [:html
    [:head
@@ -40,9 +70,9 @@
 Usage: (find-lines-in-file \"zipmap\" a-logfile)"
   (with-open [rdr (reader file)]
     (doall
-      (filter (fn [#^String line]
+        (filter (fn [#^String line]
          (< 0 (.indexOf line text)))
-         (line-seq rdr)))))
+         (flatten (map extract-expressions (line-seq rdr)))))))
 
 ;; Licenser is a mad genius.
 (defn find-lines
@@ -63,8 +93,8 @@ Usage: (extract-code \"zipmap\" parsed-logs)"
   [text files]
   (let [search-output (find-lines text files)
         regex (re-pattern (str "\\(.*" text ".*\\)"))]
-    (apply sorted-set (remove empty?
-     (map #(re-find regex %) search-output)))))
+    (apply sorted-set (flatten (remove empty?
+     (map extract-expressions search-output))))))
 
 (defn extract-working-code [#^String text files]
     (map (fn [code]
@@ -73,7 +103,7 @@ Usage: (extract-code \"zipmap\" parsed-logs)"
           [code (pr-str r)])
           (catch Exception e
             [code nil])))
-        (extract-code text files)))
+        (find-lines text files)))
 
 (defn walton-bare [text]
   (extract-working-code text logfiles))
