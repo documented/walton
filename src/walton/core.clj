@@ -53,12 +53,14 @@
   [:ul body])
 
 (defhtml code-block [[code result]]
-  [:li [:pre code] ";;=&gt" [:pre result]])
+  [:li [:pre code] ";; =&gt" [:pre result]])
 
 
-  ;; Use this in your REPL
-  (def logfiles
-       (file-seq (java.io.File. "/home/defn/git/walton/logs")))
+;; Use this in your REPL
+;; (def logfiles
+;;      (file-seq (java.io.File. "/home/defn/git/walton/logs")))
+;; M-x slime-set-default-directory "/home/project/root" will do the trick also
+;; M-x cd "/home/project/root" just to be sure...
 
 ;; Use this if you build the jar
 (def logfiles
@@ -110,7 +112,7 @@ Usage: (extract-code \"zipmap\" parsed-logs)"
 
 (defn walton [text]
   (let [results (extract-working-code text logfiles)]
-    (spit (java.io.File. (str *project-root* "/text.html"))
+    (spit (java.io.File. (str *project-root* "/" text ".html"))
           (application text
             (html (header text)
                   (code-body
