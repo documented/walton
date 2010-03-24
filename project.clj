@@ -7,4 +7,4 @@
   :dev-dependencies [[swank-clojure "1.1.0"]
                      [autodoc "0.7.0"]]
   :main walton.core
-  :namespaces [walton.core])
+  :namespaces [walton.core, walton.integration])

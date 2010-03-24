@@ -3,12 +3,15 @@
         clojure.contrib.str-utils
         clojure.contrib.seq-utils
         clj-html.core
-        net.licenser.sandbox)
+        net.licenser.sandbox
+        walton.integration)
   (:gen-class))
 
 (def *sandbox* (stringify-sandbox (new-sandbox :timeout 100)))
 
 (def *project-root* (System/getProperty "user.dir"))
+
+(def *walton-docs* (str *project-root* "walton-docs/"))
 
 
 (defn extract-expressions [string]
@@ -87,7 +90,6 @@ Usage: (find-lines \"zipmap\" logfiles)"
      (partial find-lines-in-file text)
      files)))
 
-
 (defn extract-code
 "Extracts code blocks delimited by ( and ) which contain [text].
 
@@ -108,17 +110,24 @@ Usage: (extract-code \"zipmap\" parsed-logs)"
         (find-lines text files)))
 
 (defn walton-bare [text]
+  (extract-code text logfiles))
+
+(defn walton-working [text]
   (extract-working-code text logfiles))
 
 (defn walton [text]
   (let [results (extract-working-code text logfiles)]
-    (spit (java.io.File. (str *project-root* "/" text ".html"))
+    (spit (java.io.File. (str *walton-docs* text ".html"))
           (application text
             (html (header text)
-                  (code-body
-                   (map code-block (filter second results))))))))
+              (code-body
+                (map code-block (filter second results))))))))
 
 (defn -main [& args]
-  (let [search-term (str (first args))
-        html? (str (second args))]
-    (walton search-term)))
+  (let [search-term (str (first args))]
+    (do
+      (println "Now generating" search-term ".html")
+      (walton search-term)
+      (println "Now opening" search-term "in a browser.")
+      (open-in-browser
+       (str *walton-docs* search-term ".html")))))
