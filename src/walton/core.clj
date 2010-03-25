@@ -55,11 +55,6 @@
 (defhtml code-block [[code result]]
   [:li [:pre code] ";;=&gt" [:pre result]])
 
-
-  ;; Use this in your REPL
-  (def logfiles
-       (file-seq (java.io.File. "/home/defn/git/walton/logs")))
-
 ;; Use this if you build the jar
 (def logfiles
    (rest (file-seq (java.io.File. (str *project-root* "/logs/")))))
@@ -109,12 +104,13 @@ Usage: (extract-code \"zipmap\" parsed-logs)"
   (extract-working-code text logfiles))
 
 (defn walton [text]
-  (let [results (extract-working-code text logfiles)]
+  (let [results (extract-working-code text logfiles)
+	good-results (filter second results)]
     (spit (java.io.File. (str *project-root* "/text.html"))
           (application text
             (html (header text)
                   (code-body
-                   (map code-block (filter second results))))))))
+                   (map code-block (if (not (empty? good-results)) good-results results))))))))
 
 (defn -main [& args]
   (let [search-term (str (first args))
