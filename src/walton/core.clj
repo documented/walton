@@ -62,9 +62,8 @@
 ;; Use this in your REPL
 ;; (def logfiles
 ;;      (file-seq (java.io.File. "/home/defn/git/walton/logs")))
-;; M-x slime-set-default-directory "/home/project/root" will do the trick also
-;; M-x cd "/home/project/root" just to be sure...
-
+;; M-x slime-set-default-directory "/path-to/project-root" will do the trick also
+;; M-x cd "/path-to/project-root"
 ;; Use this if you build the jar
 (def logfiles
    (rest (file-seq (java.io.File. (str *project-root* "/logs/")))))
@@ -79,7 +78,6 @@ Usage: (find-lines-in-file \"zipmap\" a-logfile)"
          (< 0 (.indexOf line text)))
          (flatten (map extract-expressions (line-seq rdr)))))))
 
-;; Licenser is a mad genius.
 (defn find-lines
 "Search for the string [text] in [files].
 
@@ -116,12 +114,13 @@ Usage: (extract-code \"zipmap\" parsed-logs)"
   (extract-working-code text logfiles))
 
 (defn walton [text]
-  (let [results (extract-working-code text logfiles)]
-    (spit (java.io.File. (str *walton-docs* text ".html"))
+  (let [results (extract-working-code text logfiles)
+	good-results (filter second results)]
+    (spit (java.io.File. (str *project-root* "/text.html"))
           (application text
             (html (header text)
-              (code-body
-                (map code-block (filter second results))))))))
+                  (code-body
+                   (map code-block (if (not (empty? good-results)) good-results results))))))))
 
 (defn -main [& args]
   (let [search-term (str (first args))]
