@@ -48,9 +48,13 @@ namespace.
   <div style="margin-left: 1em;" class="toc-section">
     <a href="#toc0">Overview</a>
     <div style="margin-left: 1em;" class="toc-entry">
-      <a href="#walton.core/extract-code">extract-code</a>
+      <a href="#walton.core/all-expressions">all-expressions</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#walton.core/collect-expressions-in-file">collect-expressions-in-file</a>
     </div><div style="margin-left: 1em;" class="toc-entry">
       <a href="#walton.core/find-lines">find-lines</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#walton.core/find-lines-in-file">find-lines-in-file</a>
     </div>
     <br />
   </div>
@@ -70,13 +74,20 @@ by <span id="author">Unknown</span><br />
 <div id="var-entry">
   <br />
   <hr />
-  <h2 id="walton.core/extract-code">extract-code</h2>
+  <h2 id="walton.core/all-expressions">all-expressions</h2>
   <span id="var-type">function</span><br />
-  <pre id="var-usage">Usage: (extract-code text files)
+  <pre id="var-usage">Usage: (all-expressions files)
 </pre>
-  <pre id="var-docstr">Extracts code blocks delimited by ( and ) which contain [text].
-
-Usage: (extract-code "zipmap" parsed-logs)</pre>
+  <pre id="var-docstr">Collects all sexps in all files.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="walton.core/collect-expressions-in-file">collect-expressions-in-file</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (collect-expressions-in-file file)
+</pre>
+  <pre id="var-docstr">Collects all sexps in a file.</pre>
   
 </div><div id="var-entry">
   <br />
@@ -86,8 +97,17 @@ Usage: (extract-code "zipmap" parsed-logs)</pre>
   <pre id="var-usage">Usage: (find-lines text files)
 </pre>
   <pre id="var-docstr">Search for the string [text] in [files].
-
 Usage: (find-lines "zipmap" logfiles)</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="walton.core/find-lines-in-file">find-lines-in-file</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (find-lines-in-file text file)
+</pre>
+  <pre id="var-docstr">Opens a file and rextracts the relevant lines from it.
+Usage: (find-lines-in-file "zipmap" a-logfile)</pre>
   
 </div>
 

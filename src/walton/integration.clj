@@ -6,7 +6,7 @@
         engine (.getEngineByName mngr "AppleScript")
         context (.getContext engine)
         bindings (.getBindings context javax.script.ScriptContext/ENGINE_SCOPE)]
-    (.eval engine (str script))))
+    (.eval engine script)))
 
 (defn open-in-browser-mac [file]
   (osascript "open " file))
