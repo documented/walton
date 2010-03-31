@@ -7,13 +7,31 @@
         walton.integration)
   (:gen-class))
 
+;; initial configuration
 (def *sandbox* (stringify-sandbox (new-sandbox :timeout 100)))
-
 (def *project-root* (System/getProperty "user.dir"))
+(def *walton-docs* (str *project-root* "/walton-docs/"))
+(def logfiles (rest (file-seq (java.io.File. (str *project-root* "/logs/")))))
 
-(def *walton-docs* (str *project-root* "walton-docs/"))
+;; layout
+(defhtml application [text body]
+  [:html
+   [:head
+    [:title text]]
+   [:body
+    [:h3 text]
+    body]])
 
+(defhtml code-body [body]
+  [:ul body])
 
+(defhtml code-block [[code result]]
+  [:li [:pre code] [:pre ";; =&gt" result]])
+
+(defhtml pre-tag [line]
+  [:pre line])
+
+;; sexp extraction
 (defn extract-expressions [string]
   (second
    (reduce (fn [[exp exps state cnt] c]
@@ -43,85 +61,88 @@
 	   [(java.lang.StringBuilder.) '() :text 0]
 	   string)))
 
-(defhtml application [text body]
-  [:html
-   [:head
-    [:title text]]
-   [:body body]])
+(defn collect-expressions-in-file
+"Collects all sexps in a file."
+  [file]
+  (with-open [rdr (reader file)]
+    (doall (flatten (map extract-expressions (line-seq rdr))))))
 
-(defhtml header [text]
-  [:h3 text])
+(defn all-expressions
+  "Collects all sexps in all files."
+  [files]
+  (flatten
+   (pmap
+    #(collect-expressions-in-file %) files)))
 
-(defhtml code-body [body]
-  [:ul body])
-
-(defhtml code-block [[code result]]
-  [:li [:pre code] ";; =&gt" [:pre result]])
-
-
-;; Use this in your REPL
-;; (def logfiles
-;;      (file-seq (java.io.File. "/home/defn/git/walton/logs")))
-;; M-x slime-set-default-directory "/path-to/project-root" will do the trick also
-;; M-x cd "/path-to/project-root"
-;; Use this if you build the jar
-(def logfiles
-   (rest (file-seq (java.io.File. (str *project-root* "/logs/")))))
-
-(defn find-lines-in-file [#^String text file]
-"Opens a file and rextracts the relevant lines from it.
-
+(defn find-lines-in-file
+  "Opens a file and rextracts the relevant lines from it.
 Usage: (find-lines-in-file \"zipmap\" a-logfile)"
+  [#^String text file]
   (with-open [rdr (reader file)]
     (doall
-        (filter (fn [#^String line]
-         (< 0 (.indexOf line text)))
-         (flatten (map extract-expressions (line-seq rdr)))))))
+     (filter (fn [#^String line]
+               (< 0 (.indexOf line text)))
+             (flatten (map extract-expressions (line-seq rdr)))))))
 
 (defn find-lines
-"Search for the string [text] in [files].
-
+  "Search for the string [text] in [files].
 Usage: (find-lines \"zipmap\" logfiles)"
   [#^String text files]
   (flatten
    (pmap
-     (partial find-lines-in-file text)
-     files)))
+    (partial find-lines-in-file text)
+    files)))
 
-(defn extract-code
-"Extracts code blocks delimited by ( and ) which contain [text].
+;; (defn extract-code
+;;   "Extracts code blocks delimited by ( and ) which contain [text].
 
-Usage: (extract-code \"zipmap\" parsed-logs)"
-  [text files]
-  (let [search-output (find-lines text files)
-        regex (re-pattern (str "\\(.*" text ".*\\)"))]
-    (apply sorted-set (flatten (remove empty?
-     (map extract-expressions search-output))))))
+;; Usage: (extract-code \"zipmap\" parsed-logs)"
+;;   [text files]
+;;   (let [search-output (find-lines text files)
+;;         regex (re-pattern (str "\\(.*" text ".*\\)"))]
+;;     (apply sorted-set (flatten (remove empty?
+;;      (map extract-expressions search-output))))))
 
 (defn extract-working-code [#^String text files]
-    (map (fn [code]
-        (try
+  (map (fn [code]
+         (try
           (let [r (*sandbox*  code)]
-          [code (pr-str r)])
+            [code (pr-str r)])
           (catch Exception e
             [code nil])))
-        (find-lines text files)))
+       (find-lines text files)))
 
-(defn walton-bare [text]
-  (extract-code text logfiles))
+(defn categorize-sexps []
+  (reduce (fn [result, code]
+            (try
+             (let [r (*sandbox* code)]
+               (update-in result [:good]
+                          conj [code (pr-str r)]))
+             (catch Exception e
+               (update-in result [:bad]
+                          conj [code nil]))))
+          {}
+          (all-expressions logfiles)))
 
-(defn walton-working [text]
-  (extract-working-code text logfiles))
+;; (defn walton-bare [text]
+;;   (extract-code text logfiles))
+
+;; (defn walton-working [text]
+;;   (extract-working-code text logfiles))
 
 (defn walton [text]
   (let [results (extract-working-code text logfiles)
-	good-results (filter second results)]
-    (spit (java.io.File. (str *project-root* "/text.html"))
+	good-results (filter second results)
+        file-loc (str *project-root* "walton-docs/" text ".html")]
+    (spit (java.io.File. file-loc)
           (application text
-            (html (header text)
-                  (code-body
-                   (map code-block (if (not (empty? good-results)) good-results results))))))))
+                       (code-body
+                        (map code-block
+                             (if (not (empty? good-results)) good-results results)))))))
 
+
+
+;; MAIN
 (defn -main [& args]
   (let [search-term (str (first args))]
     (do

@@ -17,14 +17,10 @@ help you traverse a dangerous dungeon full of snakes.
 "Oh.  Right..."
 
 You can also run it from the command line after you've run lein
-uberjar:
+uberjar.  This will generate a "zipmap.html" file in the project's
+root directory/walton-docs/zipmap.html.:
 
     $ java -jar walton-standalone.jar "zipmap"
-    
-Optionally, you can make it into sweet, sweet HTML.  (Syntax
-hilighting and other goodies coming soon?!)
-
-    $ java -jar walton-standalone.jar "zipmap" "html"
 
 ## Installation
 
@@ -38,18 +34,7 @@ Use leiningen in the project root directory to build a jar.
     $ lein deps
     $ lein uberjar
 
-Move the resulting .jar onto your classpath.
-
-*OR*
-
-Edit your project.clj to include the relevant entry for walton, which
-you can find on clojars.org. 
-
-    $ lein deps
-    $ lein repl
-
-    user> (use 'walton.core)
-    user> (walton "zipmap")
+Move the resulting walton.jar onto your classpath.
 
 ## License
 
