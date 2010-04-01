@@ -1,15 +1,15 @@
 (ns walton.integration
   (:use clojure.contrib.shell-out))
 
-(defn osascript [script]
+(defn- osascript [script]
   (let [mngr (javax.script.ScriptEngineManager.)
-        engine (.getEngineByName mngr "AppleScript")
-        context (.getContext engine)
-        bindings (.getBindings context javax.script.ScriptContext/ENGINE_SCOPE)]
+        engine (.getEngineByName mngr "AppleScript")]
     (.eval engine script)))
 
 (defn open-in-browser-mac [file]
-  (osascript "open " file))
+  (osascript (str "tell application \"Safari\"\n"
+                  "open \"" file "\"\n"
+                  "end tell\n")))
 
 (defn open-in-browser-linux [file]
   (let [which-firefox (apply str (drop-last (sh "which" "firefox")))]

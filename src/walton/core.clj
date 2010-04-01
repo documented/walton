@@ -5,7 +5,8 @@
         clj-html.core
         net.licenser.sandbox
         walton.integration
-        walton.web)
+        walton.web
+        ring.util.response)
   (:gen-class))
 
 (def *sandbox* (stringify-sandbox (new-sandbox-compiler :timeout 100)))
@@ -160,30 +161,50 @@
           (fn [#^String c] (< 0 (.indexOf c s)))
           (:bad @*sexps*)))))
 
+(defn truncate
+  "A one off truncation function which takes a coll in the form of \"[:a, :b]\".  Provided a [t]runcation length (in characters), it will truncate :a or :b and supply a new \"[\":a...\", \":b...\"]\"."
+  [coll t]
+  (let [c coll
+        ct (first c)
+        rt (second c)]
+    [(if (>= (count ct) t)
+       (apply str (take t ct) "...")
+       ct)
+     (if (>= (count rt) t)
+       (apply str (take t rt) "...")
+       rt)]))
+
 (defn walton
-  "When passed a string, finds a random walton-doc which contains [s] and truncates either the input code, or the result, to get make very long results shorter.  For instance, (range 0 1000000) would have its result truncated."
+  "Returns a single random result where the the length of code, and the length of result are both limited to 497 characters each: [code, result]."
   [#^String s]
   (let [result (walton-doc s)
-        [code-text result-text] (nth result (rand-int (count result)))
-        result-length (count result-text)
-        code-length (count code-text)]
-    [(if (>= (count code-text) 457)
-       (apply str (take 457 (first result)) "...")
-       code-text)
-    (if (>= (count result-text) 457)
-      (apply str (take 457 (second result)) "...")
-      result-text)]))
+        random-result (nth result (rand-int (count result)))]
+    (truncate random-result 497)))
 
-(defn walton-doc*
-  "Outputs the walton-doc results in HTML format for moustache."
-  [#^String text]
-  (let [results (walton-doc text)
-        code-text (map first results)
-        result-text (map second results)]
-    (application text (code-list (map code-block
-                                      results)))))
+(defn walton*
+  "A more flexible version of walton which allows you to specify [s]:a string to search for, [t]:the number of characters to truncate at, and [m?]:the number of docs you'd like as output."
+  [#^String s t m?]
+  (let [result (walton-doc s)]
+    (if (>= m? 0)
+      (map #(truncate % t) result)
+      (if (>= m? 1)
+        (take m? (map #(truncate % t) result))
+        (let [random-result (nth result (rand-int (count result)))]
+          (truncate random-result t))))))
 
 (defn walton-html
+  "Outputs the walton-doc results in HTML format for moustache, wrapped in a ring response handler."
+  [#^String text]
+  (let [results (walton* text 497 0)
+        code-text (map first results)
+        result-text (map second results)]
+    (response
+     (application
+      text
+      (code-list (map code-block
+                      results))))))
+
+(defn walton-html*
   "Takes a string and then searches for all working expressions and outputs them as an html file into project-root/walton-docs/[text].html.  If there are no working results for the string, it will output the non-working examples which were found for [text]."
   [text]
   (let [results (extract-working-code text logfiles)
@@ -202,7 +223,7 @@
   (let [search-term (first args)]
     (do
       (println "Now generating" search-term ".html")
-      (walton-html search-term)
+      (walton-html* search-term)
       (println "Now opening" search-term "in a browser.")
       (open-in-browser
        (str *walton-docs* search-term ".html")))))
