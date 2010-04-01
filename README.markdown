@@ -30,10 +30,11 @@ Or you can:
     
 "Hmm... I wonder how I use..."
 
-    user> (walton "concat")
-
-    => ["(concat [:a :b :c])", "(:a :b :c)"]
-
+    user> (walton "concat") 
+    
+    (concat [:a :b :c])
+    => (:a :b :c)
+    
 "Oh.  Right..."
 
 You can also run it from the command line after you've run lein
