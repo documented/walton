@@ -73,7 +73,7 @@
   "Collects all sexps in all files."
   [files]
   (flatten
-   (pmap
+   (map
     #(collect-expressions-in-file %) files)))
 
 (defn find-lines-in-file
@@ -91,7 +91,7 @@ Usage: (find-lines-in-file \"zipmap\" a-logfile)"
 Usage: (find-lines \"zipmap\" logfiles)"
   [#^String text files]
   (flatten
-   (pmap
+   (map
     (partial find-lines-in-file text)
     files)))
 
@@ -105,7 +105,9 @@ Usage: (find-lines \"zipmap\" logfiles)"
 ;;     (apply sorted-set (flatten (remove empty?
 ;;      (map extract-expressions search-output))))))
 
-(defn extract-working-code [#^String text files]
+(defn extract-working-code
+  "Extract working code"
+  [#^String text files]
   (map (fn [code]
          (try
           (let [r ((*sandbox*  code) {})]
@@ -115,7 +117,9 @@ Usage: (find-lines \"zipmap\" logfiles)"
        (find-lines text files)))
 
 
-(defn add-sexp [sexp]
+(defn add-sexp
+  "Adds sexps to the ref *sexps*."
+  [sexp]
   (binding [*out* nil
 	    *err* nil]
     
@@ -129,6 +133,7 @@ Usage: (find-lines \"zipmap\" logfiles)"
 		      conj sexp))))))
 
 (defn categorize-sexps
+  "Runs the expressions in a try/catch and categorizes them as :good or :bad."
   ([sexps cats]
      (reduce (fn [result, code]
 	       (try
@@ -142,26 +147,45 @@ Usage: (find-lines \"zipmap\" logfiles)"
 	     sexps))
   ([sexps] (categorize-sexps sexps {})))
 
-(defn categorize-all []
+(defn categorize-all
+  "Categorizes all expressions."
+  []
   (categorize-sexps
           (all-expressions logfiles)))
 
 
-
-(defn background-init-walton []
+;; init searchable ref (can be done in background or up front) ;;
+(defn background-init-walton
+  "Categorizes all of the sexps in the background so you can search immediately."
+  []
   (.start (Thread. (fn [] (dorun (map add-sexp (all-expressions logfiles)))))))
 
-(defn init-walton []
+(defn init-walton
+  "Categorizes all of the sexps up front."
+  []
   (dosync
    (ref-set *sexps* (categorize-all)))
   true)
   
   
-(defn w-doc [#^String s]
+(defn walton-doc [#^String s]
      (let [g (filter (fn [[#^String c r]] (< 0 (.indexOf c s))) (:good @*sexps*))]
        (if (not (empty? g))
 	 g
 	 (filter (fn [#^String c] (< 0 (.indexOf c s))) (:bad @*sexps*)))))
+
+(defn walton [#^String s]
+  (let [result (walton-doc s)
+        [code-text result-text] (nth result (rand-int (count result)))
+        result-length (count result-text)]
+    (println result)
+    [(if (>= (count code-text) 457)
+       (apply str (take 457 (first result)) "...")
+       code-text)
+    (if (>= (count result-text) 457)
+      (apply str (take 457 (second result)) "...")
+      result-text)]))
+
 
 ;; (defn walton-bare [text]
 ;;   (extract-code text logfiles))
@@ -169,7 +193,7 @@ Usage: (find-lines \"zipmap\" logfiles)"
 ;; (defn walton-working [text]
 ;;   (extract-working-code text logfiles))
 
-(defn walton [text]
+(defn walton-html [text]
   (let [results (extract-working-code text logfiles)
 	good-results (filter second results)
         file-loc (str *project-root* "walton-docs/" text ".html")]
@@ -181,7 +205,7 @@ Usage: (find-lines \"zipmap\" logfiles)"
 
 
 
-;; MAIN
+;; main ;;
 (defn -main [& args]
   (let [search-term (str (first args))]
     (do
