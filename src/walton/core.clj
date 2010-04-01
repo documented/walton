@@ -4,7 +4,8 @@
         clojure.contrib.seq-utils
         clj-html.core
         net.licenser.sandbox
-        walton.integration)
+        walton.integration
+        walton.web)
   (:gen-class))
 
 (def *sandbox* (stringify-sandbox (new-sandbox-compiler :timeout 100)))
@@ -173,6 +174,15 @@
       (apply str (take 457 (second result)) "...")
       result-text)]))
 
+(defn walton-doc*
+  "Outputs the walton-doc results in HTML format for moustache."
+  [#^String text]
+  (let [results (walton-doc text)
+        code-text (map first results)
+        result-text (map second results)]
+    (application text (code-list (map code-block
+                                      results)))))
+
 (defn walton-html
   "Takes a string and then searches for all working expressions and outputs them as an html file into project-root/walton-docs/[text].html.  If there are no working results for the string, it will output the non-working examples which were found for [text]."
   [text]
@@ -189,7 +199,7 @@
 
 (defn -main
   [& args]
-  (let [search-term (str (first args))]
+  (let [search-term (first args)]
     (do
       (println "Now generating" search-term ".html")
       (walton-html search-term)
