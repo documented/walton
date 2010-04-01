@@ -106,7 +106,7 @@ Usage: (find-lines \"zipmap\" logfiles)"
 ;;      (map extract-expressions search-output))))))
 
 (defn extract-working-code
-  "Extract working code"
+  "Extract working code."
   [#^String text files]
   (map (fn [code]
          (try
@@ -166,7 +166,7 @@ Usage: (find-lines \"zipmap\" logfiles)"
   (dosync
    (ref-set *sexps* (categorize-all)))
   true)
-  
+
   
 (defn walton-doc [#^String s]
      (let [g (filter (fn [[#^String c r]] (< 0 (.indexOf c s))) (:good @*sexps*))]
@@ -186,13 +186,6 @@ Usage: (find-lines \"zipmap\" logfiles)"
       (apply str (take 457 (second result)) "...")
       result-text)]))
 
-
-;; (defn walton-bare [text]
-;;   (extract-code text logfiles))
-
-;; (defn walton-working [text]
-;;   (extract-working-code text logfiles))
-
 (defn walton-html [text]
   (let [results (extract-working-code text logfiles)
 	good-results (filter second results)
@@ -204,13 +197,12 @@ Usage: (find-lines \"zipmap\" logfiles)"
                              (if (not (empty? good-results)) good-results results)))))))
 
 
-
 ;; main ;;
 (defn -main [& args]
   (let [search-term (str (first args))]
     (do
       (println "Now generating" search-term ".html")
-      (walton search-term)
+      (walton-html search-term)
       (println "Now opening" search-term "in a browser.")
       (open-in-browser
        (str *walton-docs* search-term ".html")))))
