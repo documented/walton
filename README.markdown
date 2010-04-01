@@ -13,37 +13,27 @@ into a directory called `logs`.
 
 ## Usage
 
-You:
+### From the REPL
 
-    (use 'walton.core)
+    user> (use 'walton.core)
     
-Then you, can either:
+    user> (background-init-walton) ;; this will result in immediate search
+    user> (init-walton) ;; this will not, and takes awhile to run
 
-    (background-init-walton)
-
-Note that `(background-init-walton)` will result in immediate search
-functionality while the logs are parsed.
-
-Or you can:
-
-    (init-walton)
-    
-"Hmm... I wonder how I use..."
-
-    user> (walton "concat") 
+    user> (walton "concat")
     
     (concat [:a :b :c])
     => (:a :b :c)
     
-"Oh.  Right..."
+    user> (concat ...)
 
-You can also run it from the command line after you've run lein
-uberjar.  This will generate a "zipmap.html" file in the `project-root/walton-docs/zipmap.html.`:
+### From the Command Line
 
-    $ java -jar walton-standalone.jar "zipmap"
-    
-Note that this will likely take awhile as walton needs to scale the depths of
-quite a bit of irc logging.
+You can also run it from the command line after you've run lein uberjar.  This will generate a "zipmap.html" file in the `project-root/walton-docs/zipmap.html.`:
+
+    user@host(~)$ java -jar walton-standalone.jar "zipmap"
+
+Note that similar to using `(walton-init)` this will likely take awhile as walton needs to scale the depths of quite a bit of irc logging.
 
 ## Building
 
@@ -52,11 +42,12 @@ Use leiningen in the project root directory to build a jar.
     $ lein deps
     $ lein uberjar
 
-Move the resulting walton.jar onto your classpath if you'd like to
-`(use 'walton.core)`.
+Move the resulting walton.jar onto your classpath if you'd like to `(use 'walton.core)` in your project.  Or add it to your `ns` macro: 
 
-Again, note that you will need a populated `logs/` directory, and a
-`walton-docs/` directory for generated walton `.html` documents.
+    (ns myproject.core
+      (:use walton.core))
+
+Again, note that you will need a populated `logs/` directory, and have created a `walton-docs/` directory for generated walton `.html` documents.
 
 ## License
 
