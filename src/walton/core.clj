@@ -30,9 +30,6 @@
 (defhtml code-block [[code result]]
   [:li [:pre code] [:pre ";; =&gt" result]])
 
-(defhtml pre-tag [line]
-  [:pre line])
-
 ;; sexp extraction
 (defn extract-expressions [string]
   (second
@@ -95,16 +92,6 @@ Usage: (find-lines \"zipmap\" logfiles)"
     (partial find-lines-in-file text)
     files)))
 
-;; (defn extract-code
-;;   "Extracts code blocks delimited by ( and ) which contain [text].
-
-;; Usage: (extract-code \"zipmap\" parsed-logs)"
-;;   [text files]
-;;   (let [search-output (find-lines text files)
-;;         regex (re-pattern (str "\\(.*" text ".*\\)"))]
-;;     (apply sorted-set (flatten (remove empty?
-;;      (map extract-expressions search-output))))))
-
 (defn extract-working-code
   "Extract working code."
   [#^String text files]
@@ -116,13 +103,11 @@ Usage: (find-lines \"zipmap\" logfiles)"
             [code nil])))
        (find-lines text files)))
 
-
 (defn add-sexp
-  "Adds sexps to the ref *sexps*."
+  "Adds sexps to a ref after trying them in an explicit in a try/catch."
   [sexp]
   (binding [*out* nil
 	    *err* nil]
-    
     (try
      (let [r ((*sandbox* sexp) {'*out* nil '*err* nil})]
        (dosync 
@@ -150,8 +135,7 @@ Usage: (find-lines \"zipmap\" logfiles)"
 (defn categorize-all
   "Categorizes all expressions."
   []
-  (categorize-sexps
-          (all-expressions logfiles)))
+  (categorize-sexps (all-expressions logfiles)))
 
 
 ;; init searchable ref (can be done in background or up front) ;;
@@ -177,8 +161,8 @@ Usage: (find-lines \"zipmap\" logfiles)"
 (defn walton [#^String s]
   (let [result (walton-doc s)
         [code-text result-text] (nth result (rand-int (count result)))
-        result-length (count result-text)]
-    (println result)
+        result-length (count result-text)
+        code-length (count code-text)]
     [(if (>= (count code-text) 457)
        (apply str (take 457 (first result)) "...")
        code-text)
