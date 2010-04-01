@@ -10,7 +10,6 @@
 ;; initial configuration
 (def *sandbox* (stringify-sandbox (new-sandbox-compiler :timeout 100)))
 (def *sexps* (ref {}))
-
 (def *project-root* (System/getProperty "user.dir"))
 (def *walton-docs* (str *project-root* "/walton-docs/"))
 (def logfiles (rest (file-seq (java.io.File. (str *project-root* "/logs/")))))
@@ -137,8 +136,6 @@ Usage: (find-lines \"zipmap\" logfiles)"
   []
   (categorize-sexps (all-expressions logfiles)))
 
-
-;; init searchable ref (can be done in background or up front) ;;
 (defn background-init-walton
   "Categorizes all of the sexps in the background so you can search immediately."
   []
@@ -150,13 +147,16 @@ Usage: (find-lines \"zipmap\" logfiles)"
   (dosync
    (ref-set *sexps* (categorize-all)))
   true)
-
   
 (defn walton-doc [#^String s]
-     (let [g (filter (fn [[#^String c r]] (< 0 (.indexOf c s))) (:good @*sexps*))]
+     (let [g (filter
+              (fn [[#^String c r]] (< 0 (.indexOf c s)))
+              (:good @*sexps*))]
        (if (not (empty? g))
 	 g
-	 (filter (fn [#^String c] (< 0 (.indexOf c s))) (:bad @*sexps*)))))
+	 (filter
+          (fn [#^String c] (< 0 (.indexOf c s)))
+          (:bad @*sexps*)))))
 
 (defn walton [#^String s]
   (let [result (walton-doc s)
@@ -178,10 +178,10 @@ Usage: (find-lines \"zipmap\" logfiles)"
           (application text
                        (code-body
                         (map code-block
-                             (if (not (empty? good-results)) good-results results)))))))
+                             (if (not (empty? good-results))
+                               good-results
+                               results)))))))
 
-
-;; main ;;
 (defn -main [& args]
   (let [search-term (str (first args))]
     (do
