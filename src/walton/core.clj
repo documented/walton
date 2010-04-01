@@ -27,7 +27,7 @@
   [:ul body])
 
 (defhtml code-block [[code result]]
-  [:li [:pre code] [:pre ";; =&gt" result]])
+  [:li [:pre code] [:pre ";; =&gt " result]])
 
 (defn extract-expressions
   "Extracts sexps."
@@ -179,7 +179,7 @@
   [#^String s]
   (let [result (walton-doc s)
         random-result (nth result (rand-int (count result)))]
-    (truncate random-result 497)))
+    (truncate 497 random-result)))
 
 (defn walton*
   "A more flexible version of walton which allows you to specify [s]:a string to search for, [t]:the number of characters to truncate at, and [m?]:the number of docs you'd like as output."
