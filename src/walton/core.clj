@@ -7,14 +7,12 @@
         walton.integration)
   (:gen-class))
 
-;; initial configuration
 (def *sandbox* (stringify-sandbox (new-sandbox-compiler :timeout 100)))
 (def *sexps* (ref {}))
 (def *project-root* (System/getProperty "user.dir"))
 (def *walton-docs* (str *project-root* "/walton-docs/"))
 (def logfiles (rest (file-seq (java.io.File. (str *project-root* "/logs/")))))
 
-;; layout
 (defhtml application [text body]
   [:html
    [:head
@@ -23,14 +21,15 @@
     [:h3 text]
     body]])
 
-(defhtml code-body [body]
+(defhtml code-list [body]
   [:ul body])
 
 (defhtml code-block [[code result]]
   [:li [:pre code] [:pre ";; =&gt" result]])
 
-;; sexp extraction
-(defn extract-expressions [string]
+(defn extract-expressions
+  "Extracts sexps."
+  [string]
   (second
    (reduce (fn [[exp exps state cnt] c]
 	     (cond
@@ -60,21 +59,22 @@
 	   string)))
 
 (defn collect-expressions-in-file
-"Collects all sexps in a file."
+"Collects all sexps in a single file."
   [file]
   (with-open [rdr (reader file)]
-    (doall (flatten (map extract-expressions (line-seq rdr))))))
+    (doall (flatten
+            (map extract-expressions
+                 (line-seq rdr))))))
 
 (defn all-expressions
-  "Collects all sexps in all files."
+  "Collects all sexps in all files into a single sequence."
   [files]
   (flatten
    (map
     #(collect-expressions-in-file %) files)))
 
 (defn find-lines-in-file
-  "Opens a file and rextracts the relevant lines from it.
-Usage: (find-lines-in-file \"zipmap\" a-logfile)"
+  "Opens a file and extracts the relevant lines from it."
   [#^String text file]
   (with-open [rdr (reader file)]
     (doall
@@ -83,8 +83,7 @@ Usage: (find-lines-in-file \"zipmap\" a-logfile)"
              (flatten (map extract-expressions (line-seq rdr)))))))
 
 (defn find-lines
-  "Search for the string [text] in [files].
-Usage: (find-lines \"zipmap\" logfiles)"
+  "Search for the string [text] in [files], where files is the result of file-seq."
   [#^String text files]
   (flatten
    (map
@@ -92,7 +91,7 @@ Usage: (find-lines \"zipmap\" logfiles)"
     files)))
 
 (defn extract-working-code
-  "Extract working code."
+  "Extract working code by running the code text in a try/catch."
   [#^String text files]
   (map (fn [code]
          (try
@@ -148,7 +147,9 @@ Usage: (find-lines \"zipmap\" logfiles)"
    (ref-set *sexps* (categorize-all)))
   true)
   
-(defn walton-doc [#^String s]
+(defn walton-doc
+  "Returns a sequence of all sexps with the tag :good which match the input string.  If no :good sexps are found, it returns the sexps which are tagged as :bad."
+  [#^String s]
      (let [g (filter
               (fn [[#^String c r]] (< 0 (.indexOf c s)))
               (:good @*sexps*))]
@@ -158,7 +159,9 @@ Usage: (find-lines \"zipmap\" logfiles)"
           (fn [#^String c] (< 0 (.indexOf c s)))
           (:bad @*sexps*)))))
 
-(defn walton [#^String s]
+(defn walton
+  "When passed a string, finds a random walton-doc which contains [s] and truncates either the input code, or the result, to get make very long results shorter.  For instance, (range 0 1000000) would have its result truncated."
+  [#^String s]
   (let [result (walton-doc s)
         [code-text result-text] (nth result (rand-int (count result)))
         result-length (count result-text)
@@ -170,19 +173,22 @@ Usage: (find-lines \"zipmap\" logfiles)"
       (apply str (take 457 (second result)) "...")
       result-text)]))
 
-(defn walton-html [text]
+(defn walton-html
+  "Takes a string and then searches for all working expressions and outputs them as an html file into project-root/walton-docs/[text].html.  If there are no working results for the string, it will output the non-working examples which were found for [text]."
+  [text]
   (let [results (extract-working-code text logfiles)
 	good-results (filter second results)
         file-loc (str *project-root* "walton-docs/" text ".html")]
     (spit (java.io.File. file-loc)
           (application text
-                       (code-body
+                       (code-list
                         (map code-block
                              (if (not (empty? good-results))
                                good-results
                                results)))))))
 
-(defn -main [& args]
+(defn -main
+  [& args]
   (let [search-term (str (first args))]
     (do
       (println "Now generating" search-term ".html")

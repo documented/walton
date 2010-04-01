@@ -48,13 +48,31 @@ namespace.
   <div style="margin-left: 1em;" class="toc-section">
     <a href="#toc0">Overview</a>
     <div style="margin-left: 1em;" class="toc-entry">
+      <a href="#walton.core/add-sexp">add-sexp</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
       <a href="#walton.core/all-expressions">all-expressions</a>
     </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#walton.core/background-init-walton">background-init-walton</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#walton.core/categorize-all">categorize-all</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#walton.core/categorize-sexps">categorize-sexps</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
       <a href="#walton.core/collect-expressions-in-file">collect-expressions-in-file</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#walton.core/extract-working-code">extract-working-code</a>
     </div><div style="margin-left: 1em;" class="toc-entry">
       <a href="#walton.core/find-lines">find-lines</a>
     </div><div style="margin-left: 1em;" class="toc-entry">
       <a href="#walton.core/find-lines-in-file">find-lines-in-file</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#walton.core/init-walton">init-walton</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#walton.core/walton">walton</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#walton.core/walton-doc">walton-doc</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#walton.core/walton-html">walton-html</a>
     </div>
     <br />
   </div>
@@ -74,11 +92,48 @@ by <span id="author">Unknown</span><br />
 <div id="var-entry">
   <br />
   <hr />
+  <h2 id="walton.core/add-sexp">add-sexp</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (add-sexp sexp)
+</pre>
+  <pre id="var-docstr">Adds sexps to a ref after trying them in an explicit in a try/catch.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
   <h2 id="walton.core/all-expressions">all-expressions</h2>
   <span id="var-type">function</span><br />
   <pre id="var-usage">Usage: (all-expressions files)
 </pre>
-  <pre id="var-docstr">Collects all sexps in all files.</pre>
+  <pre id="var-docstr">Collects all sexps in all files into a single sequence.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="walton.core/background-init-walton">background-init-walton</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (background-init-walton)
+</pre>
+  <pre id="var-docstr">Categorizes all of the sexps in the background so you can search immediately.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="walton.core/categorize-all">categorize-all</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (categorize-all)
+</pre>
+  <pre id="var-docstr">Categorizes all expressions.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="walton.core/categorize-sexps">categorize-sexps</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (categorize-sexps sexps cats)
+       (categorize-sexps sexps)
+</pre>
+  <pre id="var-docstr">Runs the expressions in a try/catch and categorizes them as :good or :bad.</pre>
   
 </div><div id="var-entry">
   <br />
@@ -87,7 +142,16 @@ by <span id="author">Unknown</span><br />
   <span id="var-type">function</span><br />
   <pre id="var-usage">Usage: (collect-expressions-in-file file)
 </pre>
-  <pre id="var-docstr">Collects all sexps in a file.</pre>
+  <pre id="var-docstr">Collects all sexps in a single file.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="walton.core/extract-working-code">extract-working-code</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (extract-working-code text files)
+</pre>
+  <pre id="var-docstr">Extract working code by running the code text in a try/catch.</pre>
   
 </div><div id="var-entry">
   <br />
@@ -96,8 +160,7 @@ by <span id="author">Unknown</span><br />
   <span id="var-type">function</span><br />
   <pre id="var-usage">Usage: (find-lines text files)
 </pre>
-  <pre id="var-docstr">Search for the string [text] in [files].
-Usage: (find-lines "zipmap" logfiles)</pre>
+  <pre id="var-docstr">Search for the string [text] in [files], where files is the result of file-seq.</pre>
   
 </div><div id="var-entry">
   <br />
@@ -106,8 +169,43 @@ Usage: (find-lines "zipmap" logfiles)</pre>
   <span id="var-type">function</span><br />
   <pre id="var-usage">Usage: (find-lines-in-file text file)
 </pre>
-  <pre id="var-docstr">Opens a file and rextracts the relevant lines from it.
-Usage: (find-lines-in-file "zipmap" a-logfile)</pre>
+  <pre id="var-docstr">Opens a file and extracts the relevant lines from it.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="walton.core/init-walton">init-walton</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (init-walton)
+</pre>
+  <pre id="var-docstr">Categorizes all of the sexps up front.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="walton.core/walton">walton</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (walton s)
+</pre>
+  <pre id="var-docstr">When passed a string, finds a random walton-doc which contains [s] and truncates either the input code, or the result, to get make very long results shorter.  For instance, (range 0 1000000) would have its result truncated.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="walton.core/walton-doc">walton-doc</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (walton-doc s)
+</pre>
+  <pre id="var-docstr">Returns a sequence of all sexps with the tag :good which match the input string.  If no :good sexps are found, it returns the sexps which are tagged as :bad.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="walton.core/walton-html">walton-html</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (walton-html text)
+</pre>
+  <pre id="var-docstr">Takes a string and then searches for all working expressions and outputs them as an html file into project-root/walton-docs/[text].html.  If there are no working results for the string, it will output the non-working examples which were found for [text].</pre>
   
 </div>
 
