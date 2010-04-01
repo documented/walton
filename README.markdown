@@ -51,4 +51,4 @@ Again, note that you will need a populated `logs/` directory, and have created a
 
 ## License
 
-See `epl-v10.html` in the project's root direction for more information.
+See `epl-v10.html` in the project's root directory for more information.
