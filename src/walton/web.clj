@@ -13,3 +13,4 @@
      (app
       ["examples" text] {:get [(fn [req] (walton-html text))]}
       [#".*"] {:get ["all routes!"]}))
+

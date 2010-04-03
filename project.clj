@@ -1,5 +1,6 @@
-(defproject walton "0.5.3"
+(defproject walton "0.5.4"
   :description "Walton will traverse caves filled with snakes to find you example clojure code containing the function you desire."
+  :url "http://getclojure.org/"
   :dependencies [[org.clojure/clojure "1.2.0-master-SNAPSHOT"]
 		 [clj-sandbox/clj-sandbox "0.2.10-SNAPSHOT"]
                  [org.clojure/clojure-contrib "1.2.0-master-SNAPSHOT"]
