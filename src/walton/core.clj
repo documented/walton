@@ -104,7 +104,7 @@
        (find-lines text files)))
 
 (defn add-sexp
-  "Adds sexps to a ref after trying them in an explicit in a try/catch."
+  "Adds sexps to a ref after trying them in a try/catch."
   [sexp]
   (binding [*out* nil
 	    *err* nil]
@@ -165,14 +165,14 @@
   "A one off truncation function which takes a coll in the form of \"[:a, :b]\".  Provided a [t]runcation length (in characters), it will truncate :a or :b and supply a new \"[\":a...\", \":b...\"]\"."
   [coll t]
   (let [c coll
-        ct (first c)
-        rt (second c)]
+        ct (seq (first c))
+        rt (seq (second c))]
     [(if (>= (count ct) t)
        (apply str (take t ct) "...")
-       ct)
+       (apply str ct))
      (if (>= (count rt) t)
        (apply str (take t rt) "...")
-       rt)]))
+       (apply str rt))]))
 
 (defn walton
   "Returns a single random result where the the length of code, and the length of result are both limited to 497 characters each: [code, result]."
