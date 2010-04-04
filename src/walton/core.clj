@@ -179,7 +179,7 @@
   [#^String s]
   (let [result (walton-doc s)
         random-result (nth result (rand-int (count result)))]
-    (truncate 497 random-result)))
+    (truncate random-result 497)))
 
 (defn walton*
   "A more flexible version of walton which allows you to specify [s]:a string to search for, [t]:the number of characters to truncate at, and [m?]:the number of docs you'd like as output."
@@ -188,7 +188,7 @@
     (if (>= m? 0)
       (map #(truncate % t) result)
       (if (>= m? 1)
-        (take m? (map #(truncate % t) result))
+        (take m? (pmap #(truncate % t) result))
         (let [random-result (nth result (rand-int (count result)))]
           (truncate random-result t))))))
 
