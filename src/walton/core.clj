@@ -1,10 +1,10 @@
 (ns walton.core
   (:use
    [clojure.contrib duck-streams str-utils seq-utils repl-utils]
-   clj-html.core
+   [hiccup core page-helpers form-helpers]
    net.licenser.sandbox
    ring.util.response
-   [walton core integration layout irc])
+   [walton core web integration layout irc])
   (:gen-class))
 
 (def *sandbox* (stringify-sandbox (new-sandbox-compiler :timeout 100)))
