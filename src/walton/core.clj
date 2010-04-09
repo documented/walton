@@ -4,7 +4,7 @@
    [hiccup core page-helpers form-helpers]
    net.licenser.sandbox
    ring.util.response
-   [walton core web integration layout irc])
+   [walton layout web integration])
   (:gen-class))
 
 (def *sandbox* (stringify-sandbox (new-sandbox-compiler :timeout 100)))

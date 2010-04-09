@@ -1,16 +1,16 @@
 (ns walton.layout
   (:use [hiccup core page-helpers form-helpers]
-        walton.core))
+        walton.core
+        walton.web))
 
 (defn application [text body]
      (html
       [:html
        [:head
-        (include-js "../../resources/public/javascript/syntaxhilighter/scripts/shCore.js"
-                    "../../resources/public/javascript/syntaxhilighter/scripts/shBrushClojure.js")
-        (include-css
-         "../../resources/public/javascript/syntaxhilighter/styles/shCore.css"
-         "../../resources/public/javascript/syntaxhilighter/styles/shThemeDefault.css")
+        (include-js "/javascript/syntaxhilighter/scripts/shCore.js"
+                    "/javascript/syntaxhilighter/scripts/shBrushClojure.js")
+        (include-css "/javascript/syntaxhilighter/styles/shCore.css"
+                     "/javascript/syntaxhilighter/styles/shThemeDefault.css")
         (javascript-tag "SyntaxHighlighter.all();")
         [:title text]]
        [:body
@@ -25,4 +25,4 @@
 (defn code-block [[code result]]
      (html
       [:li
-       [:pre.brush:.clojure code] [:pre.brush:.clojure ";; =&gt " result]]))
+       [:pre.brush:.clojure code] [:pre.brush:.clojure result]]))
