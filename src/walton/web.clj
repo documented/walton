@@ -2,8 +2,8 @@
   (:use net.cgrand.enlive-html
         net.cgrand.moustache
         [ring.adapter.jetty :only [run-jetty]]
-        [ring.util.response]
-        walton.core))
+        [ring.util.response])
+  (:require walton.core))
 
 
 (declare walton-web)

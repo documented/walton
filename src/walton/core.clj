@@ -1,12 +1,10 @@
 (ns walton.core
-  (:use clojure.contrib.duck-streams
-        clojure.contrib.str-utils
-        clojure.contrib.seq-utils
-        clj-html.core
-        net.licenser.sandbox
-        walton.integration
-        walton.web
-        ring.util.response)
+  (:use
+   [clojure.contrib duck-streams str-utils seq-utils repl-utils]
+   clj-html.core
+   net.licenser.sandbox
+   ring.util.response
+   [walton core integration layout irc])
   (:gen-class))
 
 (def *sandbox* (stringify-sandbox (new-sandbox-compiler :timeout 100)))
@@ -15,53 +13,39 @@
 (def *walton-docs* (str *project-root* "/walton-docs/"))
 (def logfiles (rest (file-seq (java.io.File. (str *project-root* "/logs/")))))
 
-(defhtml application [text body]
-  [:html
-   [:head
-    [:title text]]
-   [:body
-    [:h3 text]
-    body]])
-
-(defhtml code-list [body]
-  [:ul body])
-
-(defhtml code-block [[code result]]
-  [:li [:pre code] [:pre ";; =&gt " result]])
-
 (defn extract-expressions
   "Extracts sexps."
   [string]
   (second
    (reduce (fn [[exp exps state cnt] c]
-	     (cond
-	      (= state :escape)
-	      [(.append exp c) exps :string cnt]
-	      (= state :string) (cond
-				 (= c \")
-				 [(.append exp c) exps :code cnt]
-				 (= c \\)
-				 [(.append exp c) exps :escape cnt]
-				 (= c \\)
-				 [(.append exp c) exps :escape cnt]
-				 :else
-				 [(.append exp c) exps :string cnt])
-	      (and (= cnt 1) (= c \)))
-  	      [(java.lang.StringBuilder.) (cons (str (.append exp c)) exps) :text 0]
-	      (= c \()
-	      [(.append exp c) exps :code (inc cnt)]
-	      (and (> cnt 1) (= c \)))
-	      [(.append exp c) exps :code (dec cnt)]
-	      (and (> cnt 0) (= c \"))
-	      [(.append exp c) exps :string cnt]
-	      (> cnt 0)
-	      [(.append exp c) exps :code cnt]
-	      :else [exp exps state cnt]))
-	   [(java.lang.StringBuilder.) '() :text 0]
-	   string)))
+             (cond
+              (= state :escape)
+              [(.append exp c) exps :string cnt]
+              (= state :string) (cond
+                                 (= c \")
+                                 [(.append exp c) exps :code cnt]
+                                 (= c \\)
+                                 [(.append exp c) exps :escape cnt]
+                                 (= c \\)
+                                 [(.append exp c) exps :escape cnt]
+                                 :else
+                                 [(.append exp c) exps :string cnt])
+              (and (= cnt 1) (= c \)))
+              [(java.lang.StringBuilder.) (cons (str (.append exp c)) exps) :text 0]
+              (= c \()
+              [(.append exp c) exps :code (inc cnt)]
+              (and (> cnt 1) (= c \)))
+              [(.append exp c) exps :code (dec cnt)]
+              (and (> cnt 0) (= c \"))
+              [(.append exp c) exps :string cnt]
+              (> cnt 0)
+              [(.append exp c) exps :code cnt]
+              :else [exp exps state cnt]))
+           [(java.lang.StringBuilder.) '() :text 0]
+           string)))
 
 (defn collect-expressions-in-file
-"Collects all sexps in a single file."
+  "Collects all sexps in a single file."
   [file]
   (with-open [rdr (reader file)]
     (doall (flatten
@@ -104,32 +88,32 @@
        (find-lines text files)))
 
 (defn add-sexp
-  "Adds sexps to a ref after trying them in a try/catch."
+  "Adds sexps to a ref after trying them in an explicit in a try/catch."
   [sexp]
   (binding [*out* nil
-	    *err* nil]
+            *err* nil]
     (try
      (let [r ((*sandbox* sexp) {'*out* nil '*err* nil})]
-       (dosync 
-	(alter *sexps* update-in [:good]
-	       conj [sexp (pr-str r)])))
+       (dosync
+        (alter *sexps* update-in [:good]
+               conj [sexp (pr-str r)])))
      (catch java.lang.Throwable t
        (dosync (alter *sexps* update-in [:bad]
-		      conj sexp))))))
+                      conj sexp))))))
 
 (defn categorize-sexps
   "Runs the expressions in a try/catch and categorizes them as :good or :bad."
   ([sexps cats]
      (reduce (fn [result, code]
-	       (try
-		(let [r ((*sandbox* code) {})]
-		  (update-in result [:good]
-			     conj [code (pr-str r)]))
-		(catch java.lang.Throwable t
-		  (update-in result [:bad]
-			     conj code))))
-	     cats
-	     sexps))
+               (try
+                (let [r ((*sandbox* code) {})]
+                  (update-in result [:good]
+                             conj [code (pr-str r)]))
+                (catch java.lang.Throwable t
+                  (update-in result [:bad]
+                             conj code))))
+             cats
+             sexps))
   ([sexps] (categorize-sexps sexps {})))
 
 (defn categorize-all
@@ -148,38 +132,38 @@
   (dosync
    (ref-set *sexps* (categorize-all)))
   true)
-  
+
 (defn walton-doc
   "Returns a sequence of all sexps with the tag :good which match the input string.  If no :good sexps are found, it returns the sexps which are tagged as :bad."
   [#^String s]
-     (let [g (filter
-              (fn [[#^String c r]] (< 0 (.indexOf c s)))
-              (:good @*sexps*))]
-       (if (not (empty? g))
-	 g
-	 (filter
-          (fn [#^String c] (< 0 (.indexOf c s)))
-          (:bad @*sexps*)))))
+  (let [g (filter
+           (fn [[#^String c r]] (< 0 (.indexOf c s)))
+           (:good @*sexps*))]
+    (if (not (empty? g))
+      g
+      (filter
+       (fn [#^String c] (< 0 (.indexOf c s)))
+       (:bad @*sexps*)))))
 
 (defn truncate
   "A one off truncation function which takes a coll in the form of \"[:a, :b]\".  Provided a [t]runcation length (in characters), it will truncate :a or :b and supply a new \"[\":a...\", \":b...\"]\"."
   [coll t]
   (let [c coll
-        ct (seq (first c))
-        rt (seq (second c))]
+        ct (first c)
+        rt (second c)]
     [(if (>= (count ct) t)
        (apply str (take t ct) "...")
-       (apply str ct))
+       ct)
      (if (>= (count rt) t)
        (apply str (take t rt) "...")
-       (apply str rt))]))
+       rt)]))
 
 (defn walton
   "Returns a single random result where the the length of code, and the length of result are both limited to 497 characters each: [code, result]."
   [#^String s]
   (let [result (walton-doc s)
         random-result (nth result (rand-int (count result)))]
-    (truncate 497 random-result)))
+    (truncate random-result 497)))
 
 (defn walton*
   "A more flexible version of walton which allows you to specify [s]:a string to search for, [t]:the number of characters to truncate at, and [m?]:the number of docs you'd like as output."
@@ -188,7 +172,7 @@
     (if (>= m? 0)
       (map #(truncate % t) result)
       (if (>= m? 1)
-        (take m? (map #(truncate % t) result))
+        (take m? (pmap #(truncate % t) result))
         (let [random-result (nth result (rand-int (count result)))]
           (truncate random-result t))))))
 
@@ -208,7 +192,7 @@
   "Takes a string and then searches for all working expressions and outputs them as an html file into project-root/walton-docs/[text].html.  If there are no working results for the string, it will output the non-working examples which were found for [text]."
   [text]
   (let [results (extract-working-code text logfiles)
-	good-results (filter second results)
+        good-results (filter second results)
         file-loc (str *project-root* "walton-docs/" text ".html")]
     (spit (java.io.File. file-loc)
           (application text
