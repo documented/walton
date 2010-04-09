@@ -2,7 +2,7 @@
   :description "Walton will traverse caves filled with snakes to find you example clojure code containing the function you desire."
   :url "http://getclojure.org/"
   :dependencies [[org.clojure/clojure "1.2.0-master-SNAPSHOT"]
-		 [clj-sandbox/clj-sandbox "0.2.10-SNAPSHOT"]
+		 [clj-sandbox/clj-sandbox "0.2.12"]
                  [org.clojure/clojure-contrib "1.2.0-master-SNAPSHOT"]
                  [hiccup "0.2.3"]
                  [net.cgrand/moustache "1.0.0-SNAPSHOT"]
@@ -14,4 +14,4 @@
                      [autodoc "0.7.0"]]
   :main walton.core
   :resources-path "resources"
-  :namespaces [walton.core, walton.web, walton.integration, walton.layout, walton.irc])
+  :namespaces [walton.core])

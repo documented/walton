@@ -1,10 +1,13 @@
 (ns walton.core
-  (:use
-   [clojure.contrib duck-streams str-utils seq-utils repl-utils]
-   [hiccup core page-helpers form-helpers]
-   net.licenser.sandbox
-   ring.util.response
-   [walton integration layout web irc])
+  (:use [clojure.contrib duck-streams str-utils seq-utils repl-utils]
+        net.licenser.sandbox
+        [hiccup core page-helpers form-helpers]
+        net.cgrand.moustache
+        [net.cgrand.enlive-html :exclude [flatten]]
+        ring.util.response
+        ring.middleware.file
+        [ring.adapter.jetty :only [run-jetty]]
+        [walton core integration layout irc])
   (:gen-class))
 
 (def *sandbox* (stringify-sandbox (new-sandbox-compiler :timeout 100)))
@@ -201,6 +204,17 @@
                              (if (not (empty? good-results))
                                good-results
                                results)))))))
+
+
+(declare walton-web)
+(def server (doto (Thread. #(run-jetty #'walton-web {:port 8080})) .start))
+
+(def walton-web
+     (-> (app
+          ["examples" text] {:get [(fn [req] (walton-html text))]}
+          [#".*\.js"] {:get [(file-response "resources/public")]}
+          [#".*\.css"] {:get [(file-response "resources/public")]})
+         (wrap-file "resources/public")))
 
 (defn -main
   [& args]
