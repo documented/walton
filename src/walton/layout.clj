@@ -38,16 +38,15 @@
   "Show codes (literal strings or forms) in a pre/code block."
   [& codes]
   (let [code-string (apply format-code codes)
-        class-string "brush: clojure; toolbar: false;"
+        class-string "brush: clojure; toolbar: true;"
         class-string (if (one-liner? code-string) (str class-string  " light: true;") class-string)]
     [:script {:type "syntaxhighlighter" :class class-string}
      (str "<![CDATA[" code-string "]]>")]))
 
 (defn hide-show [#^String s]
   [:div {:class "toggle"}
-   [:div [:a {:href "javascript:void(null)"} "Show Code"]]
-   [:div {:style "display:none;"} [:a {:href "javascript:void(null)"} "Hide Code"]
-    (code* s)]])
+   [:div [:a {:href "javascript:void(null)"} (code* (first s))]]
+   [:div {:style "display:none;"} [:a {:href "javascript:void(null)"} (code* (first s) (second s))]]])
 
 (defn google-api []
   (html
@@ -67,8 +66,8 @@ google.load(\"jqueryui\", \"1.8.0\");")))
                   "/javascript/syntaxhilighter/styles/shThemeDefault.css"
                   "/css/application.css")
      (javascript-tag "SyntaxHighlighter.defaults['gutter'] = false;
-SyntaxHighlighter.defaults['toolbar'] = false;
-SyntaxHighlighter.defaults['light'] = true;
+SyntaxHighlighter.defaults['toolbar'] = true;
+SyntaxHighlighter.defaults['light'] = false;
 SyntaxHighlighter.all();")
      [:title text]]
     [:body
