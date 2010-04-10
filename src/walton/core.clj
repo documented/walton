@@ -152,26 +152,26 @@
   "A one off truncation function which takes a coll in the form of \"[:a, :b]\".  Provided a [t]runcation length (in characters), it will truncate :a or :b and supply a new \"[\":a...\", \":b...\"]\"."
   [coll t]
   (let [c coll
-        ct (first c)
-        rt (second c)]
+        ct (seq (first c))
+        rt (seq (second c))]
     [(if (>= (count ct) t)
        (apply str (take t ct) "...")
-       ct)
+       (apply str ct))
      (if (>= (count rt) t)
        (apply str (take t rt) "...")
-       rt)]))
+       (apply str rt))]))
 
 (defn walton
   "Returns a single random result where the the length of code, and the length of result are both limited to 497 characters each: [code, result]."
   [#^String s]
-  (let [result (walton-doc s)
+  (let [result (distinct (walton-doc s))
         random-result (nth result (rand-int (count result)))]
     (truncate random-result 497)))
 
 (defn walton*
-  "A more flexible version of walton which allows you to specify [s]:a string to search for, [t]:the number of characters to truncate at, and [m?]:the number of docs you'd like as output."
+  "A more flexible version of walton which allows you to specify [s]:a string to search for, [t]:the number of characters to truncate at, [m?]:the number of docs you'd like as output, and [f]:if true, will filter bad results, if false, will show both good and bad results -- true by default."
   [#^String s t m?]
-  (let [result (walton-doc s)]
+  (let [result (distinct (walton-doc s))]
     (if (>= m? 0)
       (map #(truncate % t) result)
       (if (>= m? 1)
@@ -188,8 +188,7 @@
     (response
      (application
       text
-      (code-list (map code-block
-                      results))))))
+      (map hide-show results)))))
 
 (defn walton-html*
   "Takes a string and then searches for all working expressions and outputs them as an html file into project-root/walton-docs/[text].html.  If there are no working results for the string, it will output the non-working examples which were found for [text]."
