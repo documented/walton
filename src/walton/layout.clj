@@ -24,7 +24,8 @@
      (include-js "/javascript/syntaxhilighter/scripts/shCore.js"
                  "/javascript/syntaxhilighter/scripts/shBrushClojure.js")
      (include-css "/javascript/syntaxhilighter/styles/shCore.css"
-                  "/javascript/syntaxhilighter/styles/shThemeDefault.css")
+                  "/javascript/syntaxhilighter/styles/shThemeDefault.css"
+                  "/css/application.css")
      [:script {:type "text/javascript"}
 "//<![CDATA[
 SyntaxHighlighter.defaults['gutter'] = false;
