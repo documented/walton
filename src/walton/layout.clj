@@ -14,7 +14,7 @@
   (html
    [:blockquote [:i (str (ns-name (:ns (meta v))) "/" (:name (meta v)))]
     [:br]
-    [:pre.brush:.clojure (str (:arglists (meta v)))]
+    [:pre.brush:.clojure {:style "background-color:#eee;"} (str (:arglists (meta v)))]
     (when (:macro (meta v))
       [:b "Macro"])
     [:p (str (:doc (meta v)))]]))

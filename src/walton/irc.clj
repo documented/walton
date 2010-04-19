@@ -1,50 +1,49 @@
 (ns walton.irc
-  (:use [walton core web])
-  (:import (java.net Socket)
-           (java.io PrintWriter InputStreamReader BufferedReader)))
+  (:use irclj.irclj
+        walton.core))
 
-(def freenode {:name "irc.freenode.net" :port 6667})
-(def user {:name "defn-bot" :nick "defn-bot"})
+(def *admin* "defn")
 
-(declare conn-handler)
+(defn check-user
+  "Checks the nickname of the user.  This functions as a basic authorization check for commands like \"!join\"."
+  [nick f]
+  (if (= nick "defn")
+    (f)
+    nil))
 
-(defn connect [server]
-  (let [socket (Socket. (:name server) (:port server))
-        in (BufferedReader. (InputStreamReader. (.getInputStream socket)))
-        out (PrintWriter. (.getOutputStream socket))
-        conn (ref {:in in :out out})]
-    (doto (Thread. #(conn-handler conn)) (.start))
-    conn))
+(def bot-fnmap
+     {:on-message
+      (fn [{:keys [nick channel message irc]}]
+        (let [[cmd & more] (.split message " ")]
+          (condp = cmd
+            "!join" (check-user nick #(join-chan irc (first more)))
+            "!part" (check-user nick #(part-chan irc (first more)))
+            "!identify" (send-message irc "nickserv" (str "identify youwish"))
+            "!foo" (send-message irc "#defn-bot" "bar")
+            "!walton" (if (empty? (first more))
+                        (send-message irc "#defn-bot" (str "Usage: <user> !walton zipmap"))
+                        (let [result (walton (first more))]
+                          (send-message irc "#defn-bot" (first result))
+                          (send-message irc "#defn-bot" (str "=> " (second result)))
+                          (send-message irc nick (first result))
+                          (send-message irc nick (str "=> " (second result)))))
+            nil)))})
 
-(def queue (ref []))
+(def bot
+     (connect
+      (create-irc
+       {:name "defn-bot",
+        :server "irc.freenode.net",
+        :username "defn-bot",
+        :password "youwish"
+        :port 6667,
+        :realname "defn-bot"
+        :fnmap bot-fnmap})
+      :channels ["#defn-bot"]))
 
-(defn write [conn msg]
-  (doto (:out @conn)
-    (.println (str msg "\r"))
-    (.flush)))
+;; update bot-fnmap
+(defn update-fnmap []
+  (dosync
+   (alter bot assoc :fnmap bot-fnmap)))
 
-(defn read-conn [conn]
-  (let [msg (:in @conn)]
-    (dosync
-     (commute queue conj msg)))
-  @queue)
-
-(defn conn-handler [conn]
-  (while
-   (nil? (:exit @conn))
-   (let [msg (.readLine (:in @conn))]
-     (println msg)
-     (cond
-      (re-find #"^ERROR :Closing Link:" msg)
-      (dosync (alter conn merge {:exit true}))
-      (re-find #"^PING" msg)
-      (write conn (str "PONG "  (re-find #":.*" msg)))))))
-
-(defn login [conn user]
-  (write conn (str "NICK " (:nick user)))
-  (write conn (str "USER " (:nick user) " 0 * :" (:name user))))
-
-;; (def irc (connect freenode))
-;; (login irc user)
-;; (write irc "JOIN #defn-bot")
-;; (write irc "QUIT")
+(dosync alter bot assoc :fnmap bot-fnmap)

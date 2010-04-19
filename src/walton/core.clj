@@ -1,5 +1,5 @@
 (ns walton.core
-  (:use [clojure.contrib duck-streams str-utils seq-utils repl-utils]
+  (:use [clojure.contrib duck-streams seq-utils repl-utils str-utils]
         net.licenser.sandbox
         [hiccup core page-helpers form-helpers]
         net.cgrand.moustache
@@ -7,7 +7,8 @@
         ring.util.response
         ring.middleware.file
         [ring.adapter.jetty :only [run-jetty]]
-        [walton core integration layout irc])
+        [walton integration layout irc])
+  (:require [org.danlarkin [json :as json]])
   (:gen-class))
 
 (def *sandbox* (stringify-sandbox (new-sandbox-compiler :timeout 100)))
@@ -175,7 +176,7 @@
     (if (>= m? 0)
       (map #(truncate % t) result)
       (if (>= m? 1)
-        (take m? (pmap #(truncate % t) result))
+        (take m? (map #(truncate % t) result))
         (let [random-result (nth result (rand-int (count result)))]
           (truncate random-result t))))))
 
