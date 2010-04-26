@@ -52,9 +52,6 @@ table {
 }
 
 /* GetClojure.org Custom CSS */
-.toggle a {
-   text-decoration: none;
-}
 
 /* @group Generic */
 body{
@@ -70,12 +67,13 @@ s,strike{text-decoration:line-through}
 
 /* @group Content */
 #content{
-   width:65%;
+   width:100%;
 }
   /* @group Doc Header */
 .docstring{
    overflow:hidden;
    width:100%;
+   padding-bottom: 10px;
 }
 .doc-header{
    background:#EEE;
@@ -96,43 +94,54 @@ s,strike{text-decoration:line-through}
    color:#333;
    font-weight:bold;
 }
-.doc-header h1,.doc-header .syntaxhighlighter{
-   float:left !important;
-   margin-left: 20px !important;
+.doc-header h1,.doc-header .arglist{
+   float:left;
+   margin-left: 20px;
 }
 .doc-header p{
    color:#444;
    font-size:12px;
    margin:3px 0px 3px 20px;
 }
-.doc-header .syntaxhighlighter{
+.doc-header .arglist{
+   width: 250px;
+   height: 2em;
    background:#FFF;
    border:1px solid #DDD;
-   margin:9px 0 0 15px;
-   padding:5px;
+   margin: 5px 0px 5px 10px;
+   padding:0px 5px 10px 0px;;
 }
   /* @end */
 
   /* @group Examples */
 .examples{
-   padding-top:125px;
+   padding-top:90px;
    position:relative;
 }
 .example{
    border-bottom:1px solid #DDD;
    padding:10px 0px;
-   overflow:hidden;
-   width:100% !important;
+   overflow: hidden;
 }
 .example:last-child{
    border-bottom:0;
 }
+
+.example .left,.example .right{
+   float: left;
+   width: 100%;
+}
+
 .example h1{
    font-size:18px;
-   margin:10px 0;
+   color: #888;
+   margin:5px 0px;
+   padding: 5px 0 0 0;
 }
-.example .left,.example .right{
+
+.example .syntaxhighlighter{
    float:left;
+   width: 60%;
 }
 
 .example .code,.example .return{

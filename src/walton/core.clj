@@ -7,7 +7,7 @@
         ring.util.response
         ring.middleware.file
         [ring.adapter.jetty :only [run-jetty]]
-        [walton integration layout]) ;; removed irc
+        [walton integration layout]) ;; removed irc for the time being
   (:require [org.danlarkin [json :as json]])
   (:gen-class))
 
