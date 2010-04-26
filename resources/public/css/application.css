@@ -1,54 +1,54 @@
 /* CSS RESET */
 /* v1.0 | 20080212 */
 html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, font, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	outline: 0;
-	font-size: 100%;
-	vertical-align: baseline;
-	background: transparent;
-}
+   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+      a, abbr, acronym, address, big, cite, code,
+         del, dfn, em, font, img, ins, kbd, q, s, samp,
+            small, strike, strong, sub, sup, tt, var,
+               b, u, i, center,
+                  dl, dt, dd, ol, ul, li,
+                     fieldset, form, label, legend,
+                        table, caption, tbody, tfoot, thead, tr, th, td {
+                           margin: 0;
+                           padding: 0;
+                           border: 0;
+                           outline: 0;
+                           font-size: 100%;
+                           vertical-align: baseline;
+                           background: transparent;
+                        }
 body {
-	line-height: 1;
+   line-height: 1;
 }
 ol, ul {
-	list-style: none;
+   list-style: none;
 }
 blockquote, q {
-	quotes: none;
+   quotes: none;
 }
 blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
-}
+   q:before, q:after {
+      content: '';
+      content: none;
+   }
 
 /* remember to define focus styles! */
 :focus {
-	outline: 0;
+   outline: 0;
 }
 
 /* remember to highlight inserts somehow! */
 ins {
-	text-decoration: none;
+   text-decoration: none;
 }
 del {
-	text-decoration: line-through;
+   text-decoration: line-through;
 }
 
 /* tables still need 'cellspacing="0"' in the markup */
 table {
-	border-collapse: collapse;
-	border-spacing: 0;
+   border-collapse: collapse;
+   border-spacing: 0;
 }
 
 /* GetClojure.org Custom CSS */
@@ -56,18 +56,93 @@ table {
    text-decoration: none;
 }
 
-.toggle a:hover {
-   background-color: #ccc;
-   color: #ccc;
+/* @group Generic */
+body{
+   background:#EEE;
+   color:#222;
+   font:normal normal 14px "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+   margin:0 20px;
+}
+b,strong,.b,.strong{font-weight:bold}
+i,em,.i,.em{font-style:italic}
+s,strike{text-decoration:line-through}
+/* @end */
+
+/* @group Content */
+#content{
+   width:65%;
+}
+  /* @group Doc Header */
+.docstring{
+   overflow:hidden;
+   width:100%;
+}
+.doc-header{
+   background:#EEE;
+   border-bottom:1px solid #CCC;
+   margin-left:-20px;
+   margin-bottom:7px;
+   padding-bottom:7px;
+   position:fixed;
+   width:100%;
+   z-index:1000;
+}
+.doc-header h1{
+   font:bold 36px "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+   margin-left:20px;
+   text-shadow:#CCC 2px 2px 3px;
+}
+.doc-header i{
+   color:#333;
+   font-weight:bold;
+}
+.doc-header h1,.doc-header .syntaxhighlighter{
+   float:left !important;
+   margin-left: 20px !important;
+}
+.doc-header p{
+   color:#444;
+   font-size:12px;
+   margin:3px 0px 3px 20px;
+}
+.doc-header .syntaxhighlighter{
+   background:#FFF;
+   border:1px solid #DDD;
+   margin:9px 0 0 15px;
+   padding:5px;
+}
+  /* @end */
+
+  /* @group Examples */
+.examples{
+   padding-top:125px;
+   position:relative;
+}
+.example{
+   border-bottom:1px solid #DDD;
+   padding:10px 0px;
+   overflow:hidden;
+   width:100% !important;
+}
+.example:last-child{
+   border-bottom:0;
+}
+.example h1{
+   font-size:18px;
+   margin:10px 0;
+}
+.example .left,.example .right{
+   float:left;
 }
 
-h1 {
-   padding: 5px;
-   font-size: 1.5em;
+.example .code,.example .return{
+   background:#FFF;
+   border:1px solid #DDD;
+   margin:2px 5px;
+   padding:5px 10px;
 }
-
-blockquote {
-   background-color: #eee;
-   margin-left: 10px;
-   padding: 10px;
+.example .return{
+   display:none;
 }
+  /* @end */
+/* @end */

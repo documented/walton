@@ -34,7 +34,7 @@ namespace.
     <a class="wiki_link" href="api-index.html">API Index</a><br />
     <a class="wiki_link" href="#">Namespaces:</a>
     <ul id="left-sidebar-list">
-      <li><a href="walton.core-api.html" class="wiki_link">walton.core</a></li><li><a href="walton.integration-api.html" class="wiki_link">walton.integration</a></li>
+      <li><a href="walton.core-api.html" class="wiki_link">walton.core</a></li><li><a href="walton.integration-api.html" class="wiki_link">walton.integration</a></li><li><a href="walton.irc-api.html" class="wiki_link">walton.irc</a></li><li><a href="walton.layout-api.html" class="wiki_link">walton.layout</a></li><li><a href="walton.web-api.html" class="wiki_link">walton.web</a></li>
     </ul>
   </div>
 </div>
@@ -53,6 +53,18 @@ namespace.
     <a href="#walton.integration">walton.integration</a>
     
     <br />
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#walton.irc">walton.irc</a>
+    
+    <br />
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#walton.layout">walton.layout</a>
+    
+    <br />
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#walton.web">walton.web</a>
+    
+    <br />
   </div>
 </div>
 </div>
@@ -69,7 +81,7 @@ namespace.
   <pre id="namespace-docstr"></pre>
   
   Public variables and functions:
-  <span id="var-link"><a href="walton.core-api.html#walton.core/add-sexp" id="var-tag">add-sexp</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/all-expressions" id="var-tag">all-expressions</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/background-init-walton" id="var-tag">background-init-walton</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/categorize-all" id="var-tag">categorize-all</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/categorize-sexps" id="var-tag">categorize-sexps</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/collect-expressions-in-file" id="var-tag">collect-expressions-in-file</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/extract-expressions" id="var-tag">extract-expressions</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/extract-working-code" id="var-tag">extract-working-code</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/find-lines" id="var-tag">find-lines</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/find-lines-in-file" id="var-tag">find-lines-in-file</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/init-walton" id="var-tag">init-walton</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/walton" id="var-tag">walton</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/walton-doc" id="var-tag">walton-doc</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/walton-html" id="var-tag">walton-html</a> </span><br />
+  <span id="var-link"><a href="walton.core-api.html#walton.core/add-sexp" id="var-tag">add-sexp</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/all-expressions" id="var-tag">all-expressions</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/background-init-walton" id="var-tag">background-init-walton</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/categorize-all" id="var-tag">categorize-all</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/categorize-sexps" id="var-tag">categorize-sexps</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/collect-expressions-in-file" id="var-tag">collect-expressions-in-file</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/extract-expressions" id="var-tag">extract-expressions</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/extract-working-code" id="var-tag">extract-working-code</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/find-lines" id="var-tag">find-lines</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/find-lines-in-file" id="var-tag">find-lines-in-file</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/init-walton" id="var-tag">init-walton</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/truncate" id="var-tag">truncate</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/walton" id="var-tag">walton</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/walton*" id="var-tag">walton*</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/walton-doc" id="var-tag">walton-doc</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/walton-html" id="var-tag">walton-html</a> </span><span id="var-link"><a href="walton.core-api.html#walton.core/walton-html*" id="var-tag">walton-html*</a> </span><br />
   
 </div><div id="namespace-entry">
   <br />
@@ -77,6 +89,39 @@ namespace.
   <h2 id="walton.integration">walton.integration</h2>
   by <span id="author">unknown author</span><br />
   <a href="walton.integration-api.html" id="api-link">Detailed API documentation</a><br />
+  <pre id="namespace-docstr"></pre>
+  
+  Public variables and functions:
+  <br />
+  
+</div><div id="namespace-entry">
+  <br />
+  <hr />
+  <h2 id="walton.irc">walton.irc</h2>
+  by <span id="author">unknown author</span><br />
+  <a href="walton.irc-api.html" id="api-link">Detailed API documentation</a><br />
+  <pre id="namespace-docstr"></pre>
+  
+  Public variables and functions:
+  <span id="var-link"><a href="walton.irc-api.html#walton.irc/check-user" id="var-tag">check-user</a> </span><br />
+  
+</div><div id="namespace-entry">
+  <br />
+  <hr />
+  <h2 id="walton.layout">walton.layout</h2>
+  by <span id="author">unknown author</span><br />
+  <a href="walton.layout-api.html" id="api-link">Detailed API documentation</a><br />
+  <pre id="namespace-docstr"></pre>
+  
+  Public variables and functions:
+  <span id="var-link"><a href="walton.layout-api.html#walton.layout/code*" id="var-tag">code*</a> </span><span id="var-link"><a href="walton.layout-api.html#walton.layout/format-docstring" id="var-tag">format-docstring</a> </span><span id="var-link"><a href="walton.layout-api.html#walton.layout/unveil-namespace" id="var-tag">unveil-namespace</a> </span><br />
+  
+</div><div id="namespace-entry">
+  <br />
+  <hr />
+  <h2 id="walton.web">walton.web</h2>
+  by <span id="author">unknown author</span><br />
+  <a href="walton.web-api.html" id="api-link">Detailed API documentation</a><br />
   <pre id="namespace-docstr"></pre>
   
   Public variables and functions:

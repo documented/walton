@@ -34,7 +34,7 @@ namespace.
     <a class="wiki_link" href="api-index.html">API Index</a><br />
     <a class="wiki_link" href="#">Namespaces:</a>
     <ul id="left-sidebar-list">
-      <li><a href="walton.core-api.html" class="wiki_link">walton.core</a></li><li><a href="walton.integration-api.html" class="wiki_link">walton.integration</a></li>
+      <li><a href="walton.core-api.html" class="wiki_link">walton.core</a></li><li><a href="walton.integration-api.html" class="wiki_link">walton.integration</a></li><li><a href="walton.irc-api.html" class="wiki_link">walton.irc</a></li><li><a href="walton.layout-api.html" class="wiki_link">walton.layout</a></li><li><a href="walton.web-api.html" class="wiki_link">walton.web</a></li>
     </ul>
   </div>
 </div>
@@ -86,6 +86,8 @@ Shortcuts:<br />
   <pre>
 <span id="section-content"> <a href="walton.core-api.html#walton.core/categorize-all">categorize-all</a><span id="line-content">               function      walton.core        Categorizes all expressions..
 </span></span><span id="section-content"> <a href="walton.core-api.html#walton.core/categorize-sexps">categorize-sexps</a><span id="line-content">             function      walton.core        Runs the expressions in a try/catch and categorize...
+</span></span><span id="section-content"> <a href="walton.irc-api.html#walton.irc/check-user">check-user</a><span id="line-content">                   function      walton.irc         Checks the nickname of the user.  This functions a...
+</span></span><span id="section-content"> <a href="walton.layout-api.html#walton.layout/code*">code*</a><span id="line-content">                        function      walton.layout      Show codes (literal strings or forms) in a pre/cod...
 </span></span><span id="section-content"> <a href="walton.core-api.html#walton.core/collect-expressions-in-file">collect-expressions-in-file</a><span id="line-content">  function      walton.core        Collects all sexps in a single file..
 </span></span></pre>
 </div><div id="index-body">
@@ -103,6 +105,7 @@ Shortcuts:<br />
   <pre>
 <span id="section-content"> <a href="walton.core-api.html#walton.core/find-lines">find-lines</a><span id="line-content">                   function      walton.core        Search for the string [text] in [files], where fil...
 </span></span><span id="section-content"> <a href="walton.core-api.html#walton.core/find-lines-in-file">find-lines-in-file</a><span id="line-content">           function      walton.core        Opens a file and extracts the relevant lines from ...
+</span></span><span id="section-content"> <a href="walton.layout-api.html#walton.layout/format-docstring">format-docstring</a><span id="line-content">             function      walton.layout      Formats the docstring for the web..
 </span></span></pre>
 </div><div id="index-body">
   <h2 id="G"><span id="section-head">G</span></h2>
@@ -160,11 +163,13 @@ Shortcuts:<br />
 </div><div id="index-body">
   <h2 id="T"><span id="section-head">T</span></h2>
   <pre>
-</pre>
+<span id="section-content"> <a href="walton.core-api.html#walton.core/truncate">truncate</a><span id="line-content">                     function      walton.core        A one off truncation function which takes a coll i...
+</span></span></pre>
 </div><div id="index-body">
   <h2 id="U"><span id="section-head">U</span></h2>
   <pre>
-</pre>
+<span id="section-content"> <a href="walton.layout-api.html#walton.layout/unveil-namespace">unveil-namespace</a><span id="line-content">             function      walton.layout      Gets all of the vals in the map produced by (ns-pu...
+</span></span></pre>
 </div><div id="index-body">
   <h2 id="V"><span id="section-head">V</span></h2>
   <pre>
@@ -172,9 +177,11 @@ Shortcuts:<br />
 </div><div id="index-body">
   <h2 id="W"><span id="section-head">W</span></h2>
   <pre>
-<span id="section-content"> <a href="walton.core-api.html#walton.core/walton">walton</a><span id="line-content">                       function      walton.core        When passed a string, finds a random walton-doc wh...
+<span id="section-content"> <a href="walton.core-api.html#walton.core/walton">walton</a><span id="line-content">                       function      walton.core        Returns a single random result where the the lengt...
+</span></span><span id="section-content"> <a href="walton.core-api.html#walton.core/walton*">walton*</a><span id="line-content">                      function      walton.core        A more flexible version of walton which allows you...
 </span></span><span id="section-content"> <a href="walton.core-api.html#walton.core/walton-doc">walton-doc</a><span id="line-content">                   function      walton.core        Returns a sequence of all sexps with the tag :good...
-</span></span><span id="section-content"> <a href="walton.core-api.html#walton.core/walton-html">walton-html</a><span id="line-content">                  function      walton.core        Takes a string and then searches for all working e...
+</span></span><span id="section-content"> <a href="walton.core-api.html#walton.core/walton-html">walton-html</a><span id="line-content">                  function      walton.core        Outputs the walton-doc results in HTML format for ...
+</span></span><span id="section-content"> <a href="walton.core-api.html#walton.core/walton-html*">walton-html*</a><span id="line-content">                 function      walton.core        Takes a string and then searches for all working e...
 </span></span></pre>
 </div><div id="index-body">
   <h2 id="X"><span id="section-head">X</span></h2>

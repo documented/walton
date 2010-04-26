@@ -39,14 +39,19 @@
   [& codes]
   (let [code-string (apply format-code codes)
         class-string "brush: clojure; toolbar: true;"
-        class-string (if (one-liner? code-string) (str class-string  " light: true;") class-string)]
+        class-string
+        (if (one-liner? code-string)
+          (str class-string  " light: true;") class-string)]
     [:script {:type "syntaxhighlighter" :class class-string}
      (str "<![CDATA[" code-string "]]>")]))
 
-(defn hide-show [#^String s]
-  [:div {:class "toggle"}
-   [:div [:a {:href "javascript:void(null)"} (code* (first s))]]
-   [:div {:style "display:none;"} [:a {:href "javascript:void(null)"} (code* (first s) (second s))]]])
+(defn hide-show [#^String s n]
+  [:div.example
+   [:div.left
+    [:h1 (str n)]]
+   [:div.right
+    [:div.code (code* (first s))]
+    [:div.return (code* (second s))]]])
 
 (defn google-api []
   (html
@@ -71,19 +76,41 @@ SyntaxHighlighter.defaults['light'] = false;
 SyntaxHighlighter.all();")
      [:title text]]
     [:body
-     [:h1 text]
-     (let [sym (-> (str "clojure.core/" text) symbol find-var)]
-       (if (meta sym)
-         (format-docstring sym)))
-     body]]))
+     [:div#wrapper
+      [:div#nav]
+      [:div#content
+       [:div.doc-header
+        [:div.docstring
+         [:h1 text]
+         (let [sym (-> (str "clojure.core/" text) symbol find-var)]
+           (if (meta sym)
+             [:pre.brush:.clojure (str (:arglists (meta sym)))]))]
+        (let [sym (-> (str "clojure.core/" text) symbol find-var)]
+          (if (meta sym)
+            (html [:p [:i
+                       (str (ns-name (:ns (meta sym))) "/"
+                            (:name (meta sym)))] ":"
+                   [:br]
+                   (when (:macro (meta sym))
+                     [:b "Macro"])
+                   (str (:doc (meta sym)))])))]
+       [:div.examples
+        body]]]]]))
 
 (defn code-list [body]
   (html
    [:ul
     body]))
 
-(defn code-block [[code result]]
+(defn code-block [body]
   (html
    [:li
-    [:pre.brush:.clojure code]
-    [:pre.brush:.clojure (str "; =&gt ") (str result)]]))
+    body]))
+
+(defn code-block [[code result]]
+  (html
+   [:div.example
+    [:div.left]
+    [:div.right
+     [:div.code [:pre.brush:.clojure code]]
+     [:div.return [:pre.brush:.clojure (str "; =&gt ") (str result)]]]]))

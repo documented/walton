@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>walton.integration API reference (walton)</title>
+    <title>walton.layout API reference (walton)</title>
     <link href="static/favicon.png" rel="icon" />
     <link href="static/favicon.png" rel="shortcut icon" />
     <link media="all" type="text/css" href="static/clojure.css" rel="stylesheet" />
@@ -47,23 +47,56 @@ namespace.
   <h1 class="nopad">Table of Contents</h1>
   <div style="margin-left: 1em;" class="toc-section">
     <a href="#toc0">Overview</a>
-    
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a href="#walton.layout/code*">code*</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#walton.layout/format-docstring">format-docstring</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#walton.layout/unveil-namespace">unveil-namespace</a>
+    </div>
     <br />
   </div>
 </div>
 </div>
-                <div id="content-tag"><h1 id="overview">API for <span id="namespace-name">walton.integration</span></h1>
+                <div id="content-tag"><h1 id="overview">API for <span id="namespace-name">walton.layout</span></h1>
 by <span id="author">Unknown</span><br />
 <br />Usage:
 <pre>
 (ns your-namespace
-  (:require <span id="long-name">walton.integration</span>))
+  (:require <span id="long-name">walton.layout</span>))
 </pre><pre>
 </pre><h2>Overview</h2>
 <pre id="namespace-docstr"></pre>
 <br />
 <h2>Public Variables and Functions</h2>
-
+<div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="walton.layout/code*">code*</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (code* &amp; codes)
+</pre>
+  <pre id="var-docstr">Show codes (literal strings or forms) in a pre/code block.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="walton.layout/format-docstring">format-docstring</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (format-docstring v)
+</pre>
+  <pre id="var-docstr">Formats the docstring for the web.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="walton.layout/unveil-namespace">unveil-namespace</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (unveil-namespace ns)
+</pre>
+  <pre id="var-docstr">Gets all of the vals in the map produced by (ns-publics 'ns)</pre>
+  
+</div>
 
 
 </div>

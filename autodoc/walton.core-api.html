@@ -34,7 +34,7 @@ namespace.
     <a class="wiki_link" href="api-index.html">API Index</a><br />
     <a class="wiki_link" href="#">Namespaces:</a>
     <ul id="left-sidebar-list">
-      <li><a href="walton.core-api.html" class="wiki_link">walton.core</a></li><li><a href="walton.integration-api.html" class="wiki_link">walton.integration</a></li>
+      <li><a href="walton.core-api.html" class="wiki_link">walton.core</a></li><li><a href="walton.integration-api.html" class="wiki_link">walton.integration</a></li><li><a href="walton.irc-api.html" class="wiki_link">walton.irc</a></li><li><a href="walton.layout-api.html" class="wiki_link">walton.layout</a></li><li><a href="walton.web-api.html" class="wiki_link">walton.web</a></li>
     </ul>
   </div>
 </div>
@@ -70,11 +70,17 @@ namespace.
     </div><div style="margin-left: 1em;" class="toc-entry">
       <a href="#walton.core/init-walton">init-walton</a>
     </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#walton.core/truncate">truncate</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
       <a href="#walton.core/walton">walton</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#walton.core/walton*">walton*</a>
     </div><div style="margin-left: 1em;" class="toc-entry">
       <a href="#walton.core/walton-doc">walton-doc</a>
     </div><div style="margin-left: 1em;" class="toc-entry">
       <a href="#walton.core/walton-html">walton-html</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#walton.core/walton-html*">walton-html*</a>
     </div>
     <br />
   </div>
@@ -194,11 +200,29 @@ by <span id="author">Unknown</span><br />
 </div><div id="var-entry">
   <br />
   <hr />
+  <h2 id="walton.core/truncate">truncate</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (truncate coll t)
+</pre>
+  <pre id="var-docstr">A one off truncation function which takes a coll in the form of "[:a, :b]".  Provided a [t]runcation length (in characters), it will truncate :a or :b and supply a new "[":a...", ":b..."]".</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
   <h2 id="walton.core/walton">walton</h2>
   <span id="var-type">function</span><br />
   <pre id="var-usage">Usage: (walton s)
 </pre>
-  <pre id="var-docstr">When passed a string, finds a random walton-doc which contains [s] and truncates either the input code, or the result, to get make very long results shorter.  For instance, (range 0 1000000) would have its result truncated.</pre>
+  <pre id="var-docstr">Returns a single random result where the the length of code, and the length of result are both limited to 497 characters each: [code, result].</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="walton.core/walton*">walton*</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (walton* s t m?)
+</pre>
+  <pre id="var-docstr">A more flexible version of walton which allows you to specify [s]:a string to search for, [t]:the number of characters to truncate at, [m?]:the number of docs you'd like as output, and [f]:if true, will filter bad results, if false, will show both good and bad results -- true by default.</pre>
   
 </div><div id="var-entry">
   <br />
@@ -215,6 +239,15 @@ by <span id="author">Unknown</span><br />
   <h2 id="walton.core/walton-html">walton-html</h2>
   <span id="var-type">function</span><br />
   <pre id="var-usage">Usage: (walton-html text)
+</pre>
+  <pre id="var-docstr">Outputs the walton-doc results in HTML format for moustache, wrapped in a ring response handler.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="walton.core/walton-html*">walton-html*</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (walton-html* text)
 </pre>
   <pre id="var-docstr">Takes a string and then searches for all working expressions and outputs them as an html file into project-root/walton-docs/[text].html.  If there are no working results for the string, it will output the non-working examples which were found for [text].</pre>
   

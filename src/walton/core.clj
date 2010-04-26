@@ -7,11 +7,11 @@
         ring.util.response
         ring.middleware.file
         [ring.adapter.jetty :only [run-jetty]]
-        [walton integration layout irc])
+        [walton integration layout]) ;; removed irc
   (:require [org.danlarkin [json :as json]])
   (:gen-class))
 
-(def *sandbox* (stringify-sandbox (new-sandbox-compiler :timeout 100)))
+(def *sandbox* (stringify-sandbox (new-sandbox-compiler :timeout 50)))
 (def *sexps* (ref {}))
 (def *project-root* (System/getProperty "user.dir"))
 (def *walton-docs* (str *project-root* "/walton-docs/"))
