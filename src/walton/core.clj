@@ -184,12 +184,13 @@
   "Outputs the walton-doc results in HTML format for moustache, wrapped in a ring response handler."
   [#^String text]
   (let [results (walton* text 497 0)
+        n-results (count results)
         code-text (map first results)
         result-text (map second results)]
     (response
      (application
       text
-      (map hide-show results)))))
+      (map #(hide-show %1 %2) results (range 1 n-results))))))
 
 (defn walton-html*
   "Takes a string and then searches for all working expressions and outputs them as an html file into project-root/walton-docs/[text].html.  If there are no working results for the string, it will output the non-working examples which were found for [text]."
