@@ -59,10 +59,10 @@
   (html
    [:html
     [:head
-     (include-js "/javascript/syntaxhilighter/scripts/shCore.js"
+     (include-js "/javascript/jquery.js"
+                 "/javascript/syntaxhilighter/scripts/shCore.js"
                  "/javascript/syntaxhilighter/scripts/shBrushClojure.js"
                  "/javascript/application.js")
-     (google-api)
      (include-css "/javascript/syntaxhilighter/styles/shCore.css"
                   "/javascript/syntaxhilighter/styles/shThemeDefault.css"
                   "/css/application.css")
@@ -91,6 +91,7 @@ SyntaxHighlighter.all();")
                    (str (:doc (meta sym)))])))]
        [:div.examples
         body]]]]]))
+
 
 (defn code-list [body]
   (html

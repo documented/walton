@@ -96,26 +96,30 @@ s,strike{text-decoration:line-through}
 }
 .doc-header h1,.doc-header .arglist{
    float:left;
-   margin-left: 20px;
+   margin-left: 20px auto;
 }
+
+.doc-header h1{
+   margin: 10px;;
+}
+
 .doc-header p{
    color:#444;
    font-size:12px;
    margin:3px 0px 3px 20px;
 }
 .doc-header .arglist{
-   width: 250px;
-   height: 2em;
+   width: 35em;
    background:#FFF;
    border:1px solid #DDD;
-   margin: 5px 0px 5px 10px;
-   padding:0px 5px 10px 0px;;
+   margin: 5px auto;
+   padding:0px auto 10px auto;
 }
   /* @end */
 
   /* @group Examples */
 .examples{
-   padding-top:90px;
+   padding-top:10em;
    position:relative;
 }
 .example{
@@ -129,7 +133,7 @@ s,strike{text-decoration:line-through}
 
 .example .left,.example .right{
    float: left;
-   width: 100%;
+   width: 50em;
 }
 
 .example h1{
