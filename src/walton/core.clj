@@ -9,13 +9,31 @@
         [ring.adapter.jetty :only [run-jetty]]
         [walton integration layout]) ;; removed irc for the time being
   (:require [org.danlarkin [json :as json]])
+  (:import java.io.PushbackReader
+           java.io.InputStreamReader
+           java.io.FileReader)
   (:gen-class))
 
 (def *sandbox* (stringify-sandbox (new-sandbox-compiler :timeout 50)))
-(def *sexps* (ref {}))
+(def sexps (ref {}))
 (def *project-root* (System/getProperty "user.dir"))
 (def *walton-docs* (str *project-root* "/walton-docs/"))
 (def logfiles (rest (file-seq (java.io.File. (str *project-root* "/logs/")))))
+
+(defn serialize [ds]
+  (dorun (with-out-writer
+           (java.io.File. "serialized.db")
+           (binding [*print-dup* true] (prn ds))))
+  true)
+
+(defn deserialize [f]
+  (with-open [r (PushbackReader. (FileReader. f))]
+    (let [rec (read r)]
+      rec)))
+
+(defn init-walton []
+  (dosync (ref-set sexps (deserialize "serialized.db")))
+  true)
 
 (defn extract-expressions
   "Extracts sexps."
@@ -99,7 +117,7 @@
     (try
      (let [r ((*sandbox* sexp) {'*out* nil '*err* nil})]
        (dosync
-        (alter *sexps* update-in [:good]
+        (alter sexps update-in [:good]
                conj [sexp (pr-str r)])))
      (catch java.lang.Throwable t
        (dosync (alter *sexps* update-in [:bad]
@@ -125,16 +143,16 @@
   []
   (categorize-sexps (all-expressions logfiles)))
 
-(defn background-init-walton
+(defn background-update-walton
   "Categorizes all of the sexps in the background so you can search immediately."
   []
   (.start (Thread. (fn [] (dorun (map add-sexp (all-expressions logfiles)))))))
 
-(defn init-walton
+(defn update-walton
   "Categorizes all of the sexps up front."
   []
   (dosync
-   (ref-set *sexps* (categorize-all)))
+   (ref-set sexps (categorize-all)))
   true)
 
 (defn walton-doc
@@ -142,12 +160,12 @@
   [#^String s]
   (let [g (filter
            (fn [[#^String c r]] (< 0 (.indexOf c s)))
-           (:good @*sexps*))]
+           (:good @sexps))]
     (if (not (empty? g))
       g
       (filter
        (fn [#^String c] (< 0 (.indexOf c s)))
-       (:bad @*sexps*)))))
+       (:bad @sexps)))))
 
 (defn truncate
   "A one off truncation function which takes a coll in the form of \"[:a, :b]\".  Provided a [t]runcation length (in characters), it will truncate :a or :b and supply a new \"[\":a...\", \":b...\"]\"."
