@@ -120,7 +120,7 @@
         (alter sexps update-in [:good]
                conj [sexp (pr-str r)])))
      (catch java.lang.Throwable t
-       (dosync (alter *sexps* update-in [:bad]
+       (dosync (alter sexps update-in [:bad]
                       conj sexp))))))
 
 (defn categorize-sexps
