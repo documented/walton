@@ -34,7 +34,7 @@ namespace.
     <a class="wiki_link" href="api-index.html">API Index</a><br />
     <a class="wiki_link" href="#">Namespaces:</a>
     <ul id="left-sidebar-list">
-      <li><a href="walton.core-api.html" class="wiki_link">walton.core</a></li><li><a href="walton.integration-api.html" class="wiki_link">walton.integration</a></li><li><a href="walton.irc-api.html" class="wiki_link">walton.irc</a></li><li><a href="walton.layout-api.html" class="wiki_link">walton.layout</a></li><li><a href="walton.web-api.html" class="wiki_link">walton.web</a></li>
+      <li><a href="walton.core-api.html" class="wiki_link">walton.core</a></li><li><a href="walton.init-api.html" class="wiki_link">walton.init</a></li><li><a href="walton.integration-api.html" class="wiki_link">walton.integration</a></li><li><a href="walton.irc-api.html" class="wiki_link">walton.irc</a></li><li><a href="walton.layout-api.html" class="wiki_link">walton.layout</a></li><li><a href="walton.parser-api.html" class="wiki_link">walton.parser</a></li><li><a href="walton.web-api.html" class="wiki_link">walton.web</a></li>
     </ul>
   </div>
 </div>
@@ -52,7 +52,7 @@ namespace.
     </div><div style="margin-left: 1em;" class="toc-entry">
       <a href="#walton.core/all-expressions">all-expressions</a>
     </div><div style="margin-left: 1em;" class="toc-entry">
-      <a href="#walton.core/background-init-walton">background-init-walton</a>
+      <a href="#walton.core/background-update-walton">background-update-walton</a>
     </div><div style="margin-left: 1em;" class="toc-entry">
       <a href="#walton.core/categorize-all">categorize-all</a>
     </div><div style="margin-left: 1em;" class="toc-entry">
@@ -68,9 +68,7 @@ namespace.
     </div><div style="margin-left: 1em;" class="toc-entry">
       <a href="#walton.core/find-lines-in-file">find-lines-in-file</a>
     </div><div style="margin-left: 1em;" class="toc-entry">
-      <a href="#walton.core/init-walton">init-walton</a>
-    </div><div style="margin-left: 1em;" class="toc-entry">
-      <a href="#walton.core/truncate">truncate</a>
+      <a href="#walton.core/update-walton">update-walton</a>
     </div><div style="margin-left: 1em;" class="toc-entry">
       <a href="#walton.core/walton">walton</a>
     </div><div style="margin-left: 1em;" class="toc-entry">
@@ -118,9 +116,9 @@ by <span id="author">Unknown</span><br />
 </div><div id="var-entry">
   <br />
   <hr />
-  <h2 id="walton.core/background-init-walton">background-init-walton</h2>
+  <h2 id="walton.core/background-update-walton">background-update-walton</h2>
   <span id="var-type">function</span><br />
-  <pre id="var-usage">Usage: (background-init-walton)
+  <pre id="var-usage">Usage: (background-update-walton)
 </pre>
   <pre id="var-docstr">Categorizes all of the sexps in the background so you can search immediately.</pre>
   
@@ -191,20 +189,11 @@ by <span id="author">Unknown</span><br />
 </div><div id="var-entry">
   <br />
   <hr />
-  <h2 id="walton.core/init-walton">init-walton</h2>
+  <h2 id="walton.core/update-walton">update-walton</h2>
   <span id="var-type">function</span><br />
-  <pre id="var-usage">Usage: (init-walton)
+  <pre id="var-usage">Usage: (update-walton)
 </pre>
   <pre id="var-docstr">Categorizes all of the sexps up front.</pre>
-  
-</div><div id="var-entry">
-  <br />
-  <hr />
-  <h2 id="walton.core/truncate">truncate</h2>
-  <span id="var-type">function</span><br />
-  <pre id="var-usage">Usage: (truncate coll t)
-</pre>
-  <pre id="var-docstr">A one off truncation function which takes a coll in the form of "[:a, :b]".  Provided a [t]runcation length (in characters), it will truncate :a or :b and supply a new "[":a...", ":b..."]".</pre>
   
 </div><div id="var-entry">
   <br />

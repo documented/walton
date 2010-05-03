@@ -1,24 +1,17 @@
 # walton
 
-walton is a tiny little utility that gives you a nice way of finding
+walton is a little utility that gives you a nice way of finding
 examples of how to use functions in clojure.  Additionally, it may
 help you traverse a dangerous dungeon full of snakes.
-
-## Setup
-
-First off, you're going to need the .log files!  You can download them
-[here](http://www.devinwalters.com/clojure-logs.tar.bz2 "here").  Once
-you've got the log files, unzip them into the project root directory
-into a directory called `logs`.
 
 ## Usage
 
 ### From the REPL
 
     user> (use 'walton.core)
-    
-    user> (background-init-walton) ;; this will result in immediate search
-    user> (init-walton) ;; this will not, and takes awhile to run
+ 
+    user> (init-walton)
+    => true
 
     user> (walton "concat")
     
@@ -27,13 +20,11 @@ into a directory called `logs`.
     
     user> (concat ...)
 
-### From the Command Line
+### Browse docs
 
-You can also run it from the command line after you've run lein uberjar.  This will generate a "zipmap.html" file in the `project-root/walton-docs/zipmap.html.`:
-
-    user@host(~)$ java -jar walton-standalone.jar "zipmap"
-
-Note that similar to using `(walton-init)` this will likely take awhile as walton needs to scale the depths of quite a bit of irc logging.
+Point your browser at localhost:8080/examples/zipmap to see examples
+for zipmap.  Click on an example and it will expand to show you the
+result of that function.
 
 ## Building
 
@@ -46,8 +37,6 @@ Move the resulting walton.jar onto your classpath if you'd like to `(use 'walton
 
     (ns myproject.core
       (:use walton.core))
-
-Again, note that you will need a populated `logs/` directory, and have created a `walton-docs/` directory for generated walton `.html` documents.
 
 ## License
 
