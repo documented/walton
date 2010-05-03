@@ -121,7 +121,7 @@
                conj [sexp (pr-str r)])))
      (catch java.lang.Throwable t
        (dosync (alter sexps update-in [:bad]
-                      conj sexp))))))
+                      conj [sexp (pr-str "This is not runnable in the sandbox.")]))))))
 
 (defn categorize-sexps
   "Runs the expressions in a try/catch and categorizes them as :good or :bad."
@@ -133,7 +133,7 @@
                              conj [code (pr-str r)]))
                 (catch java.lang.Throwable t
                   (update-in result [:bad]
-                             conj code))))
+                             [conj code (pr-str "This is not runnable in the sandbox.")]))))
              cats
              sexps))
   ([sexps] (categorize-sexps sexps {})))
@@ -164,7 +164,7 @@
     (if (not (empty? g))
       g
       (filter
-       (fn [#^String c] (< 0 (.indexOf c s)))
+       (fn [[#^String c]] (< 0 (.indexOf c s)))
        (:bad @sexps)))))
 
 (defn truncate

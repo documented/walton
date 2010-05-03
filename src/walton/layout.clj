@@ -19,21 +19,35 @@
       [:b "Macro"])
     [:p (str (:doc (meta v)))]]))
 
-(defn handle-leftangle [#^String s]
-  (if (re-find #".*#<.*" s) 
+(defn handle-leftangle
+  "If "
+  [#^String s]
+  (if (re-find #".*#<.*" s)
     (str "\"" s "\"")
     s))
 
-(defn format-code
+(defn format-code*
   [& codes]
   (apply str (map
               (fn [code]
                 (if (string? code)
                   (with-out-str
                     (pprint
-                     (read-string
-                      (handle-leftangle code))))))
+                     (try
+                      (read-string code)
+                      (catch Exception _
+                        (identity code)))))))
               codes)))
+
+(defn format-code
+ [& codes]
+ (apply str (map
+             (fn [code]
+               (if (string? code)
+                 (str code "\n")
+                 (with-out-str
+                   (pprint code))))
+             codes)))
 
 (defn one-liner?
   [s]
@@ -42,6 +56,14 @@
     true))
 
 (defn code*
+  "Show codes (literal strings or forms) in a pre/code block."
+  [& codes]
+  (let [code-string (apply format-code* codes)
+        class-string "brush: clojure; toolbar: true;"]
+    [:script {:type "syntaxhighlighter" :class class-string}
+     (str "<![CDATA[" code-string "]]>")]))
+
+(defn code
   "Show codes (literal strings or forms) in a pre/code block."
   [& codes]
   (let [code-string (apply format-code codes)
@@ -55,7 +77,7 @@
     [:h1 (str n ". ")]]
    [:div.right
     [:div.code (code* (first s))]
-    [:div.return (code* (second s))]]])
+    [:div.return (code (second s))]]])
 
 (defn google-api []
   (html
