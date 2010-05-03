@@ -26,6 +26,11 @@
     (str "\"" s "\"")
     s))
 
+;; (try
+;;  (read-string (handle-leftangle code))
+;;  (catch Exception _
+;;    (identity code)))
+
 (defn format-code*
   [& codes]
   (apply str (map
@@ -33,21 +38,18 @@
                 (if (string? code)
                   (with-out-str
                     (pprint
-                     (try
-                      (read-string code)
-                      (catch Exception _
-                        (identity code)))))))
+                     (read-string code)))))
               codes)))
 
 (defn format-code
- [& codes]
- (apply str (map
-             (fn [code]
-               (if (string? code)
-                 (str code "\n")
-                 (with-out-str
-                   (pprint code))))
-             codes)))
+  [& codes]
+  (apply str (map
+              (fn [code]
+                (if (string? code)
+                  (str code "\n")
+                  (with-out-str
+                    (pprint code))))
+              codes)))
 
 (defn one-liner?
   [s]
