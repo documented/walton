@@ -19,13 +19,20 @@
       [:b "Macro"])
     [:p (str (:doc (meta v)))]]))
 
+(defn handle-leftangle [#^String s]
+  (if (re-find #".*#<.*" s) 
+    (str "\"" s "\"")
+    s))
+
 (defn format-code
   [& codes]
   (apply str (map
               (fn [code]
                 (if (string? code)
-                  (str code "\n")
-                  (with-out-str (pprint code))))
+                  (with-out-str
+                    (pprint
+                     (read-string
+                      (handle-leftangle code))))))
               codes)))
 
 (defn one-liner?

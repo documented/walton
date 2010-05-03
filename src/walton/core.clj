@@ -180,6 +180,9 @@
        (apply str (take t rt) "...")
        (apply str rt))]))
 
+(defn truncate [coll t]
+  coll)
+
 (defn walton
   "Returns a single random result where the the length of code, and the length of result are both limited to 497 characters each: [code, result]."
   [#^String s]
@@ -198,10 +201,14 @@
         (let [random-result (nth result (rand-int (count result)))]
           (truncate random-result t))))))
 
+(defn walton-no-trunc
+  [#^String s]
+  (walton-doc s))
+
 (defn walton-html
   "Outputs the walton-doc results in HTML format for moustache, wrapped in a ring response handler."
   [#^String text]
-  (let [results (walton* text 497 0)
+  (let [results (walton* text 750 0)
         n-results (count results)
         code-text (map first results)
         result-text (map second results)]
