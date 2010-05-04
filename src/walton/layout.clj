@@ -8,23 +8,12 @@
   [ns]
   (vals (ns-publics ns)))
 
-(defn format-docstring
-  "Formats the docstring for the web."
-  [v]
-  (html
-   [:blockquote [:i (str (ns-name (:ns (meta v))) "/" (:name (meta v)))]
-    [:br]
-    [:pre.brush:.clojure {:style "background-color:#eee;"} (str (:arglists (meta v)))]
-    (when (:macro (meta v))
-      [:b "Macro"])
-    [:p (str (:doc (meta v)))]]))
-
-(defn handle-leftangle
-  "If "
-  [#^String s]
-  (if (re-find #".*#<.*" s)
-    (str "\"" s "\"")
-    s))
+;; (defn handle-leftangle
+;;   "If "
+;;   [#^String s]
+;;   (if (re-find #".*#<.*" s)
+;;     (str "\"" s "\"")
+;;     s))
 
 ;; (try
 ;;  (read-string (handle-leftangle code))
@@ -37,8 +26,9 @@
               (fn [code]
                 (if (string? code)
                   (with-out-str
-                    (pprint
-                     (read-string code)))))
+                    (with-pprint-dispatch *code-dispatch*
+                      (pprint
+                       (read-string code))))))
               codes)))
 
 (defn format-code
@@ -48,8 +38,11 @@
                 (if (string? code)
                   (str code "\n")
                   (with-out-str
-                    (pprint code))))
+                    (with-pprint-dispatch *code-dispatch*
+                      (pprint code)))))
               codes)))
+
+
 
 (defn one-liner?
   [s]
