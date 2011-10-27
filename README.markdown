@@ -15,15 +15,15 @@ Note, click one of the examples and it will expand to reveal the result by runni
 ### From the REPL
 
     user> (use 'walton.core)
- 
+
     user> (init-walton)
     => true
 
     user> (walton "concat")
-    
+
     (concat [:a :b :c])
     => (:a :b :c)
-    
+
     user> (concat ...)
 
 ### Browse docs
@@ -39,7 +39,7 @@ Use leiningen in the project root directory to build a jar.
     $ lein deps
     $ lein uberjar
 
-Move the resulting walton.jar onto your classpath if you'd like to `(use 'walton.core)` in your project.  Or add it to your `ns` macro: 
+Move the resulting walton.jar onto your classpath if you'd like to `(use 'walton.core)` in your project.  Or add it to your `ns` macro:
 
     (ns myproject.core
       (:use walton.core))
