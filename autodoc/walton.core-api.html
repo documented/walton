@@ -103,7 +103,7 @@ by <span id="author">Unknown</span><br />
   <pre id="var-usage">Usage: (add-sexp sexp)
 </pre>
   <pre id="var-docstr">Adds sexps to a ref after trying them in an explicit in a try/catch.</pre>
-  
+
 </div><div id="var-entry">
   <br />
   <hr />
@@ -112,7 +112,7 @@ by <span id="author">Unknown</span><br />
   <pre id="var-usage">Usage: (all-expressions files)
 </pre>
   <pre id="var-docstr">Collects all sexps in all files into a single sequence.</pre>
-  
+
 </div><div id="var-entry">
   <br />
   <hr />
@@ -121,7 +121,7 @@ by <span id="author">Unknown</span><br />
   <pre id="var-usage">Usage: (background-update-walton)
 </pre>
   <pre id="var-docstr">Categorizes all of the sexps in the background so you can search immediately.</pre>
-  
+
 </div><div id="var-entry">
   <br />
   <hr />
@@ -130,7 +130,7 @@ by <span id="author">Unknown</span><br />
   <pre id="var-usage">Usage: (categorize-all)
 </pre>
   <pre id="var-docstr">Categorizes all expressions.</pre>
-  
+
 </div><div id="var-entry">
   <br />
   <hr />
@@ -140,7 +140,7 @@ by <span id="author">Unknown</span><br />
        (categorize-sexps sexps)
 </pre>
   <pre id="var-docstr">Runs the expressions in a try/catch and categorizes them as :good or :bad.</pre>
-  
+
 </div><div id="var-entry">
   <br />
   <hr />
@@ -149,7 +149,7 @@ by <span id="author">Unknown</span><br />
   <pre id="var-usage">Usage: (collect-expressions-in-file file)
 </pre>
   <pre id="var-docstr">Collects all sexps in a single file.</pre>
-  
+
 </div><div id="var-entry">
   <br />
   <hr />
@@ -158,7 +158,7 @@ by <span id="author">Unknown</span><br />
   <pre id="var-usage">Usage: (extract-expressions string)
 </pre>
   <pre id="var-docstr">Extracts sexps.</pre>
-  
+
 </div><div id="var-entry">
   <br />
   <hr />
@@ -167,7 +167,7 @@ by <span id="author">Unknown</span><br />
   <pre id="var-usage">Usage: (extract-working-code text files)
 </pre>
   <pre id="var-docstr">Extract working code by running the code text in a try/catch.</pre>
-  
+
 </div><div id="var-entry">
   <br />
   <hr />
@@ -176,7 +176,7 @@ by <span id="author">Unknown</span><br />
   <pre id="var-usage">Usage: (find-lines text files)
 </pre>
   <pre id="var-docstr">Search for the string [text] in [files], where files is the result of file-seq.</pre>
-  
+
 </div><div id="var-entry">
   <br />
   <hr />
@@ -185,7 +185,7 @@ by <span id="author">Unknown</span><br />
   <pre id="var-usage">Usage: (find-lines-in-file text file)
 </pre>
   <pre id="var-docstr">Opens a file and extracts the relevant lines from it.</pre>
-  
+
 </div><div id="var-entry">
   <br />
   <hr />
@@ -194,7 +194,7 @@ by <span id="author">Unknown</span><br />
   <pre id="var-usage">Usage: (update-walton)
 </pre>
   <pre id="var-docstr">Categorizes all of the sexps up front.</pre>
-  
+
 </div><div id="var-entry">
   <br />
   <hr />
@@ -203,7 +203,7 @@ by <span id="author">Unknown</span><br />
   <pre id="var-usage">Usage: (walton s)
 </pre>
   <pre id="var-docstr">Returns a single random result where the the length of code, and the length of result are both limited to 497 characters each: [code, result].</pre>
-  
+
 </div><div id="var-entry">
   <br />
   <hr />
@@ -212,7 +212,7 @@ by <span id="author">Unknown</span><br />
   <pre id="var-usage">Usage: (walton* s t m?)
 </pre>
   <pre id="var-docstr">A more flexible version of walton which allows you to specify [s]:a string to search for, [t]:the number of characters to truncate at, [m?]:the number of docs you'd like as output, and [f]:if true, will filter bad results, if false, will show both good and bad results -- true by default.</pre>
-  
+
 </div><div id="var-entry">
   <br />
   <hr />
@@ -221,7 +221,7 @@ by <span id="author">Unknown</span><br />
   <pre id="var-usage">Usage: (walton-doc s)
 </pre>
   <pre id="var-docstr">Returns a sequence of all sexps with the tag :good which match the input string.  If no :good sexps are found, it returns the sexps which are tagged as :bad.</pre>
-  
+
 </div><div id="var-entry">
   <br />
   <hr />
@@ -230,7 +230,7 @@ by <span id="author">Unknown</span><br />
   <pre id="var-usage">Usage: (walton-html text)
 </pre>
   <pre id="var-docstr">Outputs the walton-doc results in HTML format for moustache, wrapped in a ring response handler.</pre>
-  
+
 </div><div id="var-entry">
   <br />
   <hr />
@@ -239,7 +239,7 @@ by <span id="author">Unknown</span><br />
   <pre id="var-usage">Usage: (walton-html* text)
 </pre>
   <pre id="var-docstr">Takes a string and then searches for all working expressions and outputs them as an html file into project-root/walton-docs/[text].html.  If there are no working results for the string, it will output the non-working examples which were found for [text].</pre>
-  
+
 </div>
 
 
