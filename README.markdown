@@ -8,9 +8,7 @@ help you traverse a dangerous dungeon full of snakes.
 
 ### From the Web
 
-If you want to check out the result of Walton, you can mosey on over to the following examples:  [concat](http://getclojure.org:8080/examples/concat "concat"), [let](http://getclojure.org:8080/examples/let "let"), [3.14](http://getclojure.org:8080/examples/3.14 "3.14"), and so on.  Basically you can put anything in place of http://www.getclojure.org:8080/examples/`foo`, where foo is the function or keyword you'd like to investigate.
-
-Note, click one of the examples and it will expand to reveal the result by running it in the clj-sandbox.
+The easiest way to use Walton is through its web interface at [getclojure.org](http://getclojure.org).
 
 ### From the REPL
 
